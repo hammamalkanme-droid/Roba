@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لعبة العائلة الكبرى 🎭 - الإصدار المطور</title>
+  <title>لعبة الكانمي الكبرى 🎭 - الإصدار المطور</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
   
   <style>
@@ -69,7 +69,7 @@
     .opt-btn.correct { background: rgba(16,185,129,0.2) !important; border-color: var(--success) !important; color: var(--success); }
     .opt-btn.wrong { background: rgba(239,68,68,0.2) !important; border-color: var(--danger) !important; color: var(--danger); }
 
-    /* لوحة الإدارة */
+    /* لوحة عمك همام */
     .admin-box { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
     .q-list-item { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
 
@@ -78,7 +78,7 @@
 <body>
 
   <div class="navbar">
-    <div class="brand">👑 تحدي العيلة</div>
+    <div class="brand">👑 تحدي الكانمي</div>
     <button class="btn-nav" id="nav-btn" onclick="toggleAdminLogin()">الإدارة ⚙️</button>
   </div>
 
@@ -87,11 +87,11 @@
     <!-- شاشة تسجيل اسم اللاعب -->
     <div id="screen-player-login" class="card active">
       <h2>أهلاً بيك في التحدي! 🎯</h2>
-      <p class="subtitle">سجل اسمك باش تخش لوحة المتصدرين</p>
+      <p class="subtitle">سجل اسمك عشان تخش لوحة المتصدرين</p>
       <div class="input-group">
-        <input type="text" id="player-name" placeholder="اكتب اسمك هنا (مثال: همام)...">
+        <input type="text" id="player-name" placeholder="اكتب اسمك هنا (مثال: جهاد)...">
       </div>
-      <button class="btn btn-primary" onclick="startApp()">دخول للعبة 🚀</button>
+      <button class="btn btn-primary" onclick="startApp()">خش للعبة 🚀</button>
     </div>
 
     <!-- شاشة اختيار الأقسام (العائلات) -->
@@ -143,7 +143,7 @@
 
     <!-- شاشة دخول الإدارة -->
     <div id="screen-admin-login" class="card">
-      <h2>دخول الإدارة 🔐</h2>
+      <h2>دخول لوحة عمك همام🔐</h2>
       <div class="input-group">
         <input type="password" id="admin-pass" placeholder="كلمة المرور (123456)">
       </div>
@@ -399,9 +399,9 @@
       
       let ratio = score / activeQuestions.length;
       let msg = "";
-      if(ratio === 1) msg = "🔥 أسطورة! حليت كل شيء صح!";
+      if(ratio === 1) msg = "🔥 لنقنك راجل! حليت كل شيء صح!";
       else if(ratio >= 0.5) msg = "😎 وضعك ممتاز، بس تقدر تدير أحسن!";
-      else msg = "😂 ضايع فيها يا غالي، حاول مرة ثانية!";
+      else msg = "😂 ضايع فيها يا تي وين وين، حاول مرة ثانية!";
       document.getElementById('res-msg').innerText = msg;
 
       // حفظ النتيجة في المتصدرين
