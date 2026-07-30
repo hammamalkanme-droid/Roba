@@ -3,427 +3,541 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لعبة العائلة الكبرى 🎭</title>
+  <title>لعبة العائلة الكبرى 🎭 - الإصدار المطور</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-      --card-bg: rgba(30, 41, 59, 0.85);
-      --accent-purple: #8b5cf6;
-      --accent-indigo: #6366f1;
-      --success-color: #10b981;
-      --danger-color: #ef4444;
-      --warning-color: #f59e0b;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --bg-dark: #0f172a; --bg-card: rgba(30, 41, 59, 0.9);
+      --primary: #8b5cf6; --primary-glow: rgba(139, 92, 246, 0.5);
+      --secondary: #ec4899;
+      --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
+      --text-light: #f8fafc; --text-muted: #94a3b8;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
-    body { background: var(--bg-gradient); min-height: 100vh; color: var(--text-main); display: flex; flex-direction: column; align-items: center; padding: 20px 15px; }
+    body { background: radial-gradient(circle at top right, #1e1b4b, #0f172a); min-height: 100vh; color: var(--text-light); display: flex; flex-direction: column; align-items: center; padding: 15px; overflow-x: hidden; }
     
-    .navbar { width: 100%; max-width: 600px; display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 12px 20px; border-radius: 16px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
-    .brand-title { font-weight: 900; font-size: 1.2rem; background: linear-gradient(to right, #a78bfa, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .btn-nav { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--text-main); padding: 6px 14px; border-radius: 10px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.3s ease; }
-    .btn-nav:hover { background: var(--accent-purple); border-color: var(--accent-purple); }
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulseGlow { 0% { box-shadow: 0 0 10px var(--primary-glow); } 50% { box-shadow: 0 0 25px var(--primary-glow); } 100% { box-shadow: 0 0 10px var(--primary-glow); } }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+    
+    .fade-in { animation: fadeIn 0.5s ease forwards; }
+    .shake { animation: shake 0.4s ease; }
+
+    .navbar { width: 100%; max-width: 600px; display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); padding: 15px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; z-index: 10; }
+    .brand { font-weight: 900; font-size: 1.3rem; background: linear-gradient(to right, #a78bfa, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .btn-nav { background: rgba(255,255,255,0.1); border: none; color: white; padding: 8px 15px; border-radius: 10px; cursor: pointer; font-weight: 700; transition: 0.3s; }
+    .btn-nav:hover { background: var(--primary); }
 
     .container { width: 100%; max-width: 600px; }
-    .card { background: var(--card-bg); border-radius: 24px; padding: 25px 20px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.4); margin-bottom: 20px; }
+    .card { background: var(--bg-card); border-radius: 20px; padding: 25px 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: none; }
+    .card.active { display: block; animation: fadeIn 0.4s ease; }
+
     h1, h2, h3 { text-align: center; margin-bottom: 15px; }
-    p.subtitle { text-align: center; color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; }
+    p.subtitle { text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem; }
 
-    .form-group { margin-bottom: 15px; }
-    label { display: block; margin-bottom: 6px; font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
-    input, select { width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(15, 23, 42, 0.6); color: var(--text-main); font-size: 0.95rem; outline: none; transition: border 0.3s ease; }
-    input:focus, select:focus { border-color: var(--accent-purple); }
+    .input-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; color: var(--text-muted); font-weight: 600; font-size: 0.9rem; }
+    input, select { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; outline: none; transition: 0.3s; }
+    input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
 
-    .btn-primary { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--accent-indigo), var(--accent-purple)); color: white; border: none; border-radius: 14px; font-size: 1.05rem; font-weight: 700; cursor: pointer; box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4); transition: transform 0.2s ease, box-shadow 0.2s ease; margin-top: 10px; }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6); }
-    .btn-secondary { background: rgba(255, 255, 255, 0.1); color: var(--text-main); border: 1px solid rgba(255, 255, 255, 0.2); }
+    .btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; animation: pulseGlow 2s infinite; }
+    .btn-primary:hover { transform: scale(1.02); }
+    .btn-outline { background: transparent; border: 2px solid var(--primary); color: white; }
+    .btn-outline:hover { background: var(--primary); }
+    .btn-danger { background: var(--danger); color: white; }
 
-    .options-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
-    .opt-btn { background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.1); padding: 16px; border-radius: 16px; color: var(--text-main); font-size: 1.05rem; font-weight: 600; cursor: pointer; text-align: right; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center; }
-    .opt-btn:hover { background: rgba(139, 92, 246, 0.15); border-color: var(--accent-purple); transform: translateX(-4px); }
-    .opt-btn.correct { background: rgba(16, 185, 129, 0.2) !important; border-color: var(--success-color) !important; color: #34d399 !important; }
-    .opt-btn.wrong { background: rgba(239, 68, 68, 0.2) !important; border-color: var(--danger-color) !important; color: #f87171 !important; }
+    /* شبكة الأقسام */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
+    .category-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px 10px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; }
+    .category-card:hover { background: var(--primary); transform: translateY(-5px); }
+    .lock-icon { position: absolute; top: 10px; left: 10px; font-size: 1.2rem; }
 
-    .rounds-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-top: 20px; }
-    .round-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 20px 10px; text-align: center; cursor: pointer; transition: all 0.3s ease; }
-    .round-card:hover { background: var(--accent-purple); transform: translateY(-4px); }
+    /* شاشة اللعب */
+    .timer-container { width: 100%; height: 12px; background: rgba(0,0,0,0.5); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
+    .timer-bar { height: 100%; width: 100%; background: var(--success); transition: width 1s linear, background 0.3s; }
+    
+    .question-box { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 20px; border: 1px solid var(--primary); }
+    .q-image { width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; margin-top: 15px; display: none; }
 
-    .q-item { background: rgba(15, 23, 42, 0.7); padding: 12px 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255, 255, 255, 0.05); }
-    .q-item span { font-size: 0.9rem; }
-    .btn-del { background: var(--danger-color); color: white; border: none; padding: 4px 10px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; }
+    .options { display: flex; flex-direction: column; gap: 10px; }
+    .opt-btn { background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; color: white; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: 0.2s; text-align: right; }
+    .opt-btn:hover { border-color: var(--primary); background: rgba(139,92,246,0.1); }
+    .opt-btn.correct { background: rgba(16,185,129,0.2) !important; border-color: var(--success) !important; color: var(--success); }
+    .opt-btn.wrong { background: rgba(239,68,68,0.2) !important; border-color: var(--danger) !important; color: var(--danger); }
 
-    .progress-bar { width: 100%; height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-purple), #f472b6); width: 0%; transition: width 0.3s ease; }
-    .badge { display: inline-block; padding: 4px 12px; background: rgba(139, 92, 246, 0.2); color: #c084fc; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; }
-    .hidden { display: none !important; }
+    /* لوحة الإدارة */
+    .admin-box { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
+    .q-list-item { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+
   </style>
 </head>
 <body>
 
-  <!-- شريط العلوي -->
   <div class="navbar">
-    <div class="brand-title">👑 لعبة العائلة</div>
-    <button class="btn-nav" id="admin-toggle-btn" onclick="openLoginModal()">لوحة الإدارة ⚙️</button>
+    <div class="brand">👑 تحدي العيلة</div>
+    <button class="btn-nav" id="nav-btn" onclick="toggleAdminLogin()">الإدارة ⚙️</button>
   </div>
 
   <div class="container">
-
-    <!-- 1. شاشة اختيار الجولة -->
-    <div id="screen-rounds" class="card">
-      <h2>مرحباً بكم في تحدي العيلة 🎭</h2>
-      <p class="subtitle">اختر الجولة وتبت شكون أكثر واحد فاهم العيلة صح!</p>
-      <div id="rounds-container" class="rounds-grid"></div>
+    
+    <!-- شاشة تسجيل اسم اللاعب -->
+    <div id="screen-player-login" class="card active">
+      <h2>أهلاً بيك في التحدي! 🎯</h2>
+      <p class="subtitle">سجل اسمك باش تخش لوحة المتصدرين</p>
+      <div class="input-group">
+        <input type="text" id="player-name" placeholder="اكتب اسمك هنا (مثال: همام)...">
+      </div>
+      <button class="btn btn-primary" onclick="startApp()">دخول للعبة 🚀</button>
     </div>
 
-    <!-- 2. شاشة اللعب والأسئلة -->
-    <div id="screen-game" class="card hidden">
-      <div class="progress-bar">
-        <div id="progress-fill" class="progress-fill"></div>
-      </div>
-      <div style="text-align: center;">
-        <span id="game-round-badge" class="badge">الجولة 1</span>
-        <span id="game-count-badge" class="badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">سؤال 1 من 5</span>
+    <!-- شاشة اختيار الأقسام (العائلات) -->
+    <div id="screen-categories" class="card">
+      <h2>اختار القسم يا <span id="display-player-name" style="color:var(--warning);"></span></h2>
+      <p class="subtitle">كل قسم فيه أسئلة وتحديات مختلفة</p>
+      <div id="categories-grid" class="grid"></div>
+      <button class="btn btn-outline" onclick="showLeaderboard()" style="margin-top: 20px;">🏆 لوحة المتصدرين</button>
+    </div>
+
+    <!-- شاشة اللعب -->
+    <div id="screen-game" class="card">
+      <div style="display:flex; justify-content: space-between; font-size:0.9rem; margin-bottom:10px; color:var(--warning);">
+        <span id="game-cat-name">القسم العام</span>
+        <span id="game-q-counter">سؤال 1 / 5</span>
       </div>
       
-      <h2 id="question-text" style="margin-top: 15px;">نص السؤال يظهر هنا؟</h2>
+      <!-- المؤقت -->
+      <div class="timer-container">
+        <div id="timer-bar" class="timer-bar"></div>
+      </div>
+
+      <div class="question-box">
+        <h2 id="q-text" style="margin:0; font-size:1.4rem;">السؤال هنا؟</h2>
+        <img id="q-img" class="q-image" src="" alt="صورة توضيحية">
+      </div>
+
+      <div id="options-box" class="options"></div>
+    </div>
+
+    <!-- شاشة النتيجة -->
+    <div id="screen-result" class="card">
+      <h2>النتيجة النهائية 🎉</h2>
+      <div style="font-size: 4rem; text-align: center; color: var(--warning); font-weight: 900; margin: 20px 0;">
+        <span id="res-score">0</span><span style="font-size:2rem; color:white;">/<span id="res-total">0</span></span>
+      </div>
+      <p id="res-msg" style="text-align:center; font-size:1.2rem; font-weight:bold;"></p>
+      <button class="btn btn-primary" onclick="showCategories()">الرجوع للأقسام 🔄</button>
+      <button class="btn btn-outline" onclick="showLeaderboard()">🏆 لوحة المتصدرين</button>
+    </div>
+
+    <!-- شاشة لوحة المتصدرين -->
+    <div id="screen-leaderboard" class="card">
+      <h2>🏆 لوحة المتصدرين</h2>
+      <p class="subtitle">أفضل اللاعبين في جهازك</p>
+      <div id="leaderboard-list" style="margin-bottom:20px;"></div>
+      <button class="btn btn-outline" onclick="showCategories()">رجوع</button>
+    </div>
+
+    <!-- شاشة دخول الإدارة -->
+    <div id="screen-admin-login" class="card">
+      <h2>دخول الإدارة 🔐</h2>
+      <div class="input-group">
+        <input type="password" id="admin-pass" placeholder="كلمة المرور (123456)">
+      </div>
+      <button class="btn btn-primary" onclick="loginAdmin()">دخول</button>
+      <button class="btn btn-outline" onclick="showCategories()">إلغاء</button>
+    </div>
+
+    <!-- لوحة الإدارة الشاملة -->
+    <div id="screen-admin" class="card">
+      <h2>لوحة التحكم 🛠️</h2>
       
-      <!-- مكان عرض الصورة في حال وجودها -->
-      <img id="question-image" src="" alt="صورة توضيحية" style="width: 100%; border-radius: 16px; margin-top: 15px; display: none; border: 2px solid rgba(255,255,255,0.1);">
-      
-      <div id="options-container" class="options-grid"></div>
-    </div>
-
-    <!-- 3. شاشة النتيجة النهائية -->
-    <div id="screen-result" class="card hidden">
-      <h2>🎉 تمت الجولة بنجاح!</h2>
-      <p class="subtitle">النتيجة النهائية متاعك:</p>
-      <div style="font-size: 3.5rem; text-align: center; font-weight: 900; color: var(--warning-color); margin: 10px 0;">
-        <span id="final-score">0</span> / <span id="total-questions">0</span>
-      </div>
-      <p id="result-evaluation" style="text-align: center; font-size: 1.1rem; margin-bottom: 20px; font-weight: 700;"></p>
-      <button class="btn-primary" onclick="showRoundsScreen()">الرجوع للقائمة الرئيسية 🔄</button>
-    </div>
-
-    <!-- 4. شاشة تسجيل دخول الأدمن -->
-    <div id="screen-login" class="card hidden">
-      <h2>تسجيل دخول الإدارة 🔐</h2>
-      <p class="subtitle">خاص بالمشرف (همَّام الكانمي)</p>
-      <div class="form-group">
-        <label>اسم المستخدم:</label>
-        <input type="text" id="login-username" placeholder="مثال: همام الكانمي">
-      </div>
-      <div class="form-group">
-        <label>كلمة السر:</label>
-        <input type="password" id="login-password" placeholder="******">
-      </div>
-      <button class="btn-primary" onclick="attemptLogin()">دخول لوحة التحكم</button>
-      <button class="btn-primary btn-secondary" onclick="showRoundsScreen()" style="margin-top: 8px;">إلغاء</button>
-    </div>
-
-    <!-- 5. لوحة الإدارة (إضافة وتعديل الأسئلة) -->
-    <div id="screen-admin" class="card hidden">
-      <h2>لوحة تحكم الأدمن 🛠️</h2>
-      <p class="subtitle">أهلاً بك يا همَّام! ضيف وعدّل الأسئلة براحتك</p>
-
-      <!-- نموذج إضافة سؤال -->
-      <div style="background: rgba(15, 23, 42, 0.5); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
-        <h3 style="font-size: 1rem; color: var(--accent-purple);">➕ إضافة سؤال جديد:</h3>
+      <div class="admin-box">
+        <h3 style="color:var(--primary); font-size:1.1rem;">➕ إضافة سؤال جديد</h3>
         
-        <div class="form-group">
-          <label>رقم الجولة (1, 2, 3...):</label>
-          <input type="number" id="add-q-round" value="1" min="1">
+        <div class="input-group">
+          <label>اسم القسم (مثلاً: عام، عائلة فوزي):</label>
+          <input type="text" id="add-cat" value="عام">
         </div>
-        <div class="form-group">
+        <div class="input-group">
+          <label>كلمة مرور للقسم (خليها فاضية لو تبيه مفتوح للكل):</label>
+          <input type="text" id="add-cat-pass" placeholder="مثال: 0000">
+        </div>
+        <div class="input-group">
           <label>نص السؤال:</label>
-          <input type="text" id="add-q-text" placeholder="مثلاً: من الأسرع لما نقولوا الماكلة واطية؟">
+          <input type="text" id="add-q-text" placeholder="اكتب السؤال هنا...">
         </div>
         
-        <!-- التعديل الجديد: خانة إضافة الصورة -->
-        <div class="form-group">
-          <label>رابط صورة للسؤال (اختياري):</label>
-          <input type="text" id="add-q-image" placeholder="حط رابط الصورة من النت، أو خليها فاضية">
+        <div class="input-group">
+          <label>صورة السؤال (اختار من جهازك مباشرة):</label>
+          <input type="file" id="add-q-file" accept="image/*" style="padding: 5px;">
         </div>
-        
-        <div class="form-group">
-          <label>الخيارات الاربعة:</label>
-          <input type="text" id="opt-0" placeholder="الخيار الأول (رقم 1)" style="margin-bottom: 6px;">
-          <input type="text" id="opt-1" placeholder="الخيار الثاني (رقم 2)" style="margin-bottom: 6px;">
-          <input type="text" id="opt-2" placeholder="الخيار الثالث (رقم 3)" style="margin-bottom: 6px;">
-          <input type="text" id="opt-3" placeholder="الخيار الرابع (رقم 4)">
+
+        <div class="input-group" style="display: flex; gap:10px;">
+          <div style="flex:1;">
+            <label>وقت السؤال (بالثواني):</label>
+            <input type="number" id="add-q-time" value="15" min="5">
+          </div>
         </div>
-        
-        <div class="form-group">
-          <label>الإجابة الصحيحة هي الخيار رقم:</label>
+
+        <div class="input-group">
+          <label>الخيارات (4 خيارات):</label>
+          <input type="text" id="opt0" placeholder="الخيار الأول" style="margin-bottom:5px;">
+          <input type="text" id="opt1" placeholder="الخيار الثاني" style="margin-bottom:5px;">
+          <input type="text" id="opt2" placeholder="الخيار الثالث" style="margin-bottom:5px;">
+          <input type="text" id="opt3" placeholder="الخيار الرابع">
+        </div>
+        <div class="input-group">
+          <label>الإجابة الصحيحة هي:</label>
           <select id="add-q-correct">
-            <option value="0">الخيار الأول (1)</option>
-            <option value="1">الخيار الثاني (2)</option>
-            <option value="2">الخيار الثالث (3)</option>
-            <option value="3">الخيار الرابع (4)</option>
+            <option value="0">الخيار الأول</option>
+            <option value="1">الخيار الثاني</option>
+            <option value="2">الخيار الثالث</option>
+            <option value="3">الخيار الرابع</option>
           </select>
         </div>
-        
-        <button class="btn-primary" onclick="addNewQuestion()">حفظ السؤال جديد 💾</button>
+        <button class="btn btn-primary" onclick="addQuestion()">حفظ السؤال 💾</button>
       </div>
 
-      <div style="background: rgba(15, 23, 42, 0.5); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
-        <h3 style="font-size: 1rem; color: var(--warning-color);">📤 مشاركة الأسئلة مع العيلة:</h3>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">انقر على تصدير وانسخ النص وابعثه للعيلة، وهم يديروا "استيراد" عنده عشان تنزل الأسئلة الجديدة!</p>
-        <button class="btn-primary btn-secondary" onclick="exportQuestions()" style="margin-bottom: 8px;">نسخ كود الأسئلة 📋</button>
-        <button class="btn-primary btn-secondary" onclick="importQuestions()">استيراد كود الأسئلة 📥</button>
+      <div class="admin-box">
+        <h3>الأسئلة الحالية (<span id="admin-count">0</span>)</h3>
+        <div id="admin-q-list" style="max-height: 250px; overflow-y: auto;"></div>
+        <button class="btn btn-danger" onclick="clearLeaderboard()" style="margin-top:15px;">مسح لوحة المتصدرين 🗑️</button>
+        <button class="btn btn-outline" onclick="exportData()" style="margin-top:10px;">نسخ قاعدة البيانات 📋</button>
+        <button class="btn btn-outline" onclick="importData()" style="margin-top:10px;">استيراد 📥</button>
       </div>
-
-      <h3>قائمة الأسئلة المخزنة (<span id="admin-q-count">0</span>):</h3>
-      <div id="admin-questions-list" style="max-height: 200px; overflow-y: auto; margin-top: 10px;"></div>
-
-      <button class="btn-primary" onclick="logoutAdmin()" style="background: var(--danger-color); margin-top: 20px;">تسجيل الخروج 🚪</button>
+      
+      <button class="btn btn-outline" onclick="showCategories()">خروج من الإدارة 🚪</button>
     </div>
 
   </div>
 
-  <!-- الأصوات -->
-  <audio id="sound-good" src="good.m4a"></audio>
-<audio id="sound-wrong" src="wrong.m4a"></audio>
-
+  <!-- الصوتيات -->
+  <audio id="s-good" src="good.m4a"></audio>
+  <audio id="s-wrong" src="wrong.m4a"></audio>
+  <audio id="s-timeout" src="timeout.m4a"></audio>
 
   <script>
-    const defaultQuestions = [
-      {
-        round: 1,
-        q: "من أسرع واحد في العيلة لما نقولوا الماكلة واطية؟ 🏃‍♂️",
-        image: "", 
-        options: ["أحمد", "همّام", "عمر", "أيوب"],
-        correct: 0
-      },
-      {
-        round: 1,
-        q: "من الشخص المعروف بقمة العباطة والكساد؟ 🤪",
-        image: "",
-        options: ["سارة", "أسامة", "عبدالعزيز", "آدم"],
-        correct: 1
-      }
-    ];
+    // --- قواعد البيانات المحلية ---
+    let db = JSON.parse(localStorage.getItem('family_game_db')) || [];
+    let leaderboard = JSON.parse(localStorage.getItem('family_leaderboard')) || [];
+    
+    // متغيرات اللعبة
+    let currentPlayer = "";
+    let activeQuestions = [];
+    let currentQIdx = 0;
+    let score = 0;
+    
+    // متغيرات المؤقت
+    let timerInterval;
+    let timeLeft = 0;
+    let totalTime = 15;
+    let isAnswered = false;
 
-    let questions = [];
-    let currentFilteredQuestions = [];
-    let currentQIndex = 0;
-    let currentScore = 0;
-    let isAdminLoggedIn = false;
-
-    function loadStoredQuestions() {
-      const stored = localStorage.getItem('family_quiz_db');
-      if (stored) {
-        try { questions = JSON.parse(stored); } catch(e) { questions = [...defaultQuestions]; }
-      } else {
-        questions = [...defaultQuestions];
-        saveQuestionsToStorage();
-      }
+    // --- التبديل بين الشاشات ---
+    function switchScreen(screenId) {
+      document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
     }
 
-    function saveQuestionsToStorage() { localStorage.setItem('family_quiz_db', JSON.stringify(questions)); }
-
-    window.onload = function() { loadStoredQuestions(); showRoundsScreen(); };
-
-    function hideAllScreens() {
-      document.getElementById('screen-rounds').classList.add('hidden');
-      document.getElementById('screen-game').classList.add('hidden');
-      document.getElementById('screen-result').classList.add('hidden');
-      document.getElementById('screen-login').classList.add('hidden');
-      document.getElementById('screen-admin').classList.add('hidden');
+    // --- البداية ---
+    function startApp() {
+      let name = document.getElementById('player-name').value.trim();
+      if(!name) { alert("اكتب اسمك يا غالي باش تلعب!"); return; }
+      currentPlayer = name;
+      document.getElementById('display-player-name').innerText = name;
+      showCategories();
     }
 
-    function showRoundsScreen() { hideAllScreens(); document.getElementById('screen-rounds').classList.remove('hidden'); renderRounds(); }
-
-    function renderRounds() {
-      const container = document.getElementById('rounds-container');
-      container.innerHTML = "";
-      const roundsSet = new Set(questions.map(q => q.round));
-      const roundsList = Array.from(roundsSet).sort((a,b) => a - b);
-
-      if(roundsList.length === 0) { container.innerHTML = "<p style='grid-column: 1/-1; color: var(--text-muted);'>لا توجد أسئلة حالياً.</p>"; return; }
-
-      let allCard = document.createElement('div');
-      allCard.className = 'round-card';
-      allCard.style.borderColor = 'var(--accent-purple)';
-      allCard.innerHTML = `<h3>🎯 التحدي الكامل</h3><p style="font-size:0.8rem; color:var(--text-muted);">كل الأسئلة</p>`;
-      allCard.onclick = () => startGame(0);
-      container.appendChild(allCard);
-
-      roundsList.forEach(r => {
-        let card = document.createElement('div');
-        card.className = 'round-card';
-        card.innerHTML = `<h3>الجولة ${r}</h3><p style="font-size:0.8rem; color:var(--text-muted);">${questions.filter(q=>q.round===r).length} أسئلة</p>`;
-        card.onclick = () => startGame(r);
-        container.appendChild(card);
+    function showCategories() {
+      switchScreen('screen-categories');
+      let grid = document.getElementById('categories-grid');
+      grid.innerHTML = "";
+      
+      // استخراج الأقسام الفريدة
+      let cats = {};
+      db.forEach(q => {
+        if(!cats[q.cat]) cats[q.cat] = { count: 0, pass: q.catPass };
+        cats[q.cat].count++;
+        if(q.catPass) cats[q.cat].pass = q.catPass; // تحديث الباسورد لو موجود
       });
-    }
 
-    function startGame(roundNum) {
-      if (roundNum === 0) { currentFilteredQuestions = [...questions]; } 
-      else { currentFilteredQuestions = questions.filter(q => q.round === roundNum); }
-      if(currentFilteredQuestions.length === 0) { alert("لا توجد أسئلة!"); return; }
-
-      currentQIndex = 0; currentScore = 0;
-      hideAllScreens();
-      document.getElementById('screen-game').classList.remove('hidden');
-      displayQuestion();
-    }
-
-    function displayQuestion() {
-      let q = currentFilteredQuestions[currentQIndex];
-      document.getElementById('game-round-badge').innerText = q.round ? `الجولة ${q.round}` : "التحدي العام";
-      document.getElementById('game-count-badge').innerText = `سؤال ${currentQIndex + 1} من ${currentFilteredQuestions.length}`;
-      let pct = ((currentQIndex) / currentFilteredQuestions.length) * 100;
-      document.getElementById('progress-fill').style.width = pct + "%";
-
-      document.getElementById('question-text').innerText = q.q;
-
-      // --- كود عرض الصورة في حال وجودها ---
-      let imgEl = document.getElementById('question-image');
-      if (q.image && q.image.trim() !== "") {
-        imgEl.src = q.image.trim();
-        imgEl.style.display = "block"; // إظهار الصورة
-      } else {
-        imgEl.style.display = "none";  // إخفاء المكان لو مفيش صورة
-        imgEl.src = "";
+      if(Object.keys(cats).length === 0) {
+        grid.innerHTML = "<p style='grid-column:1/-1;text-align:center;'>لا توجد أسئلة، ادخل للإدارة وضيف أسئلة!</p>";
+        return;
       }
 
-      let optsContainer = document.getElementById('options-container');
-      optsContainer.innerHTML = "";
-      q.options.forEach((optText, idx) => {
-        if(!optText.trim()) return;
+      for (let catName in cats) {
+        let isLocked = cats[catName].pass ? true : false;
+        let div = document.createElement('div');
+        div.className = 'category-card';
+        div.innerHTML = `
+          ${isLocked ? '<span class="lock-icon">🔒</span>' : ''}
+          <h3 style="margin-top:${isLocked?'10px':'0'};">${catName}</h3>
+          <p style="font-size:0.8rem; color:var(--text-muted);">${cats[catName].count} أسئلة</p>
+        `;
+        div.onclick = () => attemptStartCategory(catName, cats[catName].pass);
+        grid.appendChild(div);
+      }
+    }
+
+    function attemptStartCategory(catName, pass) {
+      if(pass) {
+        let input = prompt(`قسم "${catName}" محمي برمز سري. دخل الرمز:`);
+        if(input !== pass) { alert("الرمز غلط! جرب مرة ثانية."); return; }
+      }
+      activeQuestions = db.filter(q => q.cat === catName);
+      currentQIdx = 0;
+      score = 0;
+      switchScreen('screen-game');
+      document.getElementById('game-cat-name').innerText = catName;
+      loadQuestion();
+    }
+
+    // --- نظام اللعب والمؤقت ---
+    function loadQuestion() {
+      isAnswered = false;
+      let q = activeQuestions[currentQIdx];
+      document.getElementById('game-q-counter').innerText = `سؤال ${currentQIdx + 1} / ${activeQuestions.length}`;
+      document.getElementById('q-text').innerText = q.qText;
+      
+      let imgEl = document.getElementById('q-img');
+      if(q.imgBase64) { imgEl.src = q.imgBase64; imgEl.style.display = "block"; } 
+      else { imgEl.src = ""; imgEl.style.display = "none"; }
+
+      let optBox = document.getElementById('options-box');
+      optBox.innerHTML = "";
+      q.options.forEach((opt, idx) => {
+        if(!opt) return;
         let btn = document.createElement('button');
-        btn.className = 'opt-btn';
-        btn.innerHTML = `<span>${optText}</span> <span style="font-size:0.8rem; opacity:0.5;">#${idx+1}</span>`;
-        btn.onclick = () => selectOption(idx, btn);
-        optsContainer.appendChild(btn);
+        btn.className = 'opt-btn fade-in';
+        btn.style.animationDelay = `${idx * 0.1}s`;
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(idx, btn);
+        optBox.appendChild(btn);
       });
+
+      startTimer(q.time || 15);
     }
 
-    function selectOption(selectedIndex, btnElement) {
-      let allBtns = document.querySelectorAll('.opt-btn');
-      allBtns.forEach(b => b.style.pointerEvents = 'none');
+    function startTimer(seconds) {
+      clearInterval(timerInterval);
+      totalTime = seconds; timeLeft = seconds;
+      let bar = document.getElementById('timer-bar');
+      bar.style.width = "100%";
+      bar.style.background = "var(--success)";
 
-      let currentQ = currentFilteredQuestions[currentQIndex];
-      let soundGood = document.getElementById('sound-good');
-      let soundWrong = document.getElementById('sound-wrong');
+      timerInterval = setInterval(() => {
+        if(isAnswered) { clearInterval(timerInterval); return; }
+        timeLeft--;
+        let pct = (timeLeft / totalTime) * 100;
+        bar.style.width = pct + "%";
+        
+        if(pct <= 30) bar.style.background = "var(--danger)";
+        else if(pct <= 60) bar.style.background = "var(--warning)";
 
-      if (selectedIndex === currentQ.correct) {
+        if(timeLeft <= 0) {
+          clearInterval(timerInterval);
+          timeOutAction();
+        }
+      }, 1000);
+    }
+
+    function timeOutAction() {
+      if(isAnswered) return;
+      isAnswered = true;
+      playSound('s-timeout');
+      
+      let q = activeQuestions[currentQIdx];
+      let btns = document.querySelectorAll('.opt-btn');
+      btns.forEach(b => b.style.pointerEvents = 'none');
+      if(btns[q.correct]) btns[q.correct].classList.add('correct');
+      
+      document.getElementById('screen-game').classList.add('shake');
+      setTimeout(() => document.getElementById('screen-game').classList.remove('shake'), 500);
+
+      nextQuestionDelay();
+    }
+
+    function checkAnswer(selectedIdx, btnElement) {
+      if(isAnswered) return;
+      isAnswered = true;
+      clearInterval(timerInterval);
+      
+      let q = activeQuestions[currentQIdx];
+      let btns = document.querySelectorAll('.opt-btn');
+      btns.forEach(b => b.style.pointerEvents = 'none');
+
+      if(selectedIdx === q.correct) {
         btnElement.classList.add('correct');
-        currentScore++;
-        soundGood.currentTime = 0; soundGood.play().catch(e=>console.log("الصوت محتاج تشغيل يدوي"));
+        playSound('s-good');
+        score++;
       } else {
         btnElement.classList.add('wrong');
-        if(allBtns[currentQ.correct]) { allBtns[currentQ.correct].classList.add('correct'); }
-        soundWrong.currentTime = 0; soundWrong.play().catch(e=>console.log("الصوت محتاج تشغيل يدوي"));
+        btnElement.classList.add('shake');
+        if(btns[q.correct]) btns[q.correct].classList.add('correct');
+        playSound('s-wrong');
       }
+      nextQuestionDelay();
+    }
 
+    function nextQuestionDelay() {
       setTimeout(() => {
-        currentQIndex++;
-        if (currentQIndex < currentFilteredQuestions.length) { displayQuestion(); } 
-        else { finishGame(); }
-      }, 1600);
+        currentQIdx++;
+        if(currentQIdx < activeQuestions.length) loadQuestion();
+        else finishGame();
+      }, 2000);
     }
 
     function finishGame() {
-      hideAllScreens();
-      document.getElementById('screen-result').classList.remove('hidden');
-      document.getElementById('final-score').innerText = currentScore;
-      document.getElementById('total-questions').innerText = currentFilteredQuestions.length;
+      switchScreen('screen-result');
+      document.getElementById('res-score').innerText = score;
+      document.getElementById('res-total').innerText = activeQuestions.length;
+      
+      let ratio = score / activeQuestions.length;
+      let msg = "";
+      if(ratio === 1) msg = "🔥 أسطورة! حليت كل شيء صح!";
+      else if(ratio >= 0.5) msg = "😎 وضعك ممتاز، بس تقدر تدير أحسن!";
+      else msg = "😂 ضايع فيها يا غالي، حاول مرة ثانية!";
+      document.getElementById('res-msg').innerText = msg;
 
-      let ratio = currentScore / currentFilteredQuestions.length;
-      let evalText = "";
-      if (ratio === 1) evalText = "🏆 أسطورة! فاهم العيلة أدق تفاصيلها!";
-      else if (ratio >= 0.6) evalText = "😎 ممتاز! جوّك مليح وفاهم معظم اللقطات!";
-      else evalText = "😂 فاااشل! محتاج تقعد مع العيلة أكثر وتعرف أخبارهم!";
-      document.getElementById('result-evaluation').innerText = evalText;
+      // حفظ النتيجة في المتصدرين
+      leaderboard.push({ name: currentPlayer, cat: activeQuestions[0].cat, score: score, total: activeQuestions.length });
+      localStorage.setItem('family_leaderboard', JSON.stringify(leaderboard));
     }
 
-    function openLoginModal() {
-      if (isAdminLoggedIn) { showAdminPanel(); } 
-      else { hideAllScreens(); document.getElementById('screen-login').classList.remove('hidden'); }
-    }
-
-    function attemptLogin() {
-      let user = document.getElementById('login-username').value.trim();
-      let pass = document.getElementById('login-password').value.trim();
-      if ((user === "همام الكانمي" || user === "همَّام الكانمي" || user === "همام") && pass === "123456") {
-        isAdminLoggedIn = true;
-        document.getElementById('admin-toggle-btn').innerText = "لوحة الإدارة 🛠️";
-        showAdminPanel();
-      } else { alert("اسم المستخدم أو كلمة السر غير صحيحة!"); }
-    }
-
-    function logoutAdmin() {
-      isAdminLoggedIn = false;
-      document.getElementById('admin-toggle-btn').innerText = "لوحة الإدارة ⚙️";
-      showRoundsScreen();
-    }
-
-    function showAdminPanel() { hideAllScreens(); document.getElementById('screen-admin').classList.remove('hidden'); renderAdminQuestionsList(); }
-
-    function addNewQuestion() {
-      let roundNum = parseInt(document.getElementById('add-q-round').value) || 1;
-      let qText = document.getElementById('add-q-text').value.trim();
-      let qImg = document.getElementById('add-q-image').value.trim(); // جلب رابط الصورة
-      let o0 = document.getElementById('opt-0').value.trim();
-      let o1 = document.getElementById('opt-1').value.trim();
-      let o2 = document.getElementById('opt-2').value.trim();
-      let o3 = document.getElementById('opt-3').value.trim();
-      let correctIdx = parseInt(document.getElementById('add-q-correct').value);
-
-      if (!qText || !o0 || !o1) { alert("يرجى كتابة نص السؤال وعلى الأقل خيارين اثنين!"); return; }
-
-      let newQ = {
-        round: roundNum,
-        q: qText,
-        image: qImg, // حفظ الصورة في بيانات السؤال
-        options: [o0, o1, o2, o3].filter(o => o !== ""),
-        correct: correctIdx
-      };
-
-      questions.push(newQ); saveQuestionsToStorage(); alert("تمت إضافة السؤال بنجاح! 🥳");
-
-      document.getElementById('add-q-text').value = "";
-      document.getElementById('add-q-image').value = ""; // تفريغ خانة الصورة
-      document.getElementById('opt-0').value = ""; document.getElementById('opt-1').value = "";
-      document.getElementById('opt-2').value = ""; document.getElementById('opt-3').value = "";
-      renderAdminQuestionsList();
-    }
-
-    function deleteQuestion(index) {
-      if (confirm("هل أنت متأكد من مسح هذا السؤال؟")) {
-        questions.splice(index, 1); saveQuestionsToStorage(); renderAdminQuestionsList();
-      }
-    }
-
-    function renderAdminQuestionsList() {
-      document.getElementById('admin-q-count').innerText = questions.length;
-      let listDiv = document.getElementById('admin-questions-list');
-      listDiv.innerHTML = "";
-      questions.forEach((q, idx) => {
-        let item = document.createElement('div');
-        item.className = 'q-item';
-        item.innerHTML = `<div><strong style="color:var(--accent-purple);">[جـ ${q.round}]</strong> <span>${q.q}</span> ${q.image ? '📸' : ''}</div><button class="btn-del" onclick="deleteQuestion(${idx})">مسح</button>`;
-        listDiv.appendChild(item);
+    function showLeaderboard() {
+      switchScreen('screen-leaderboard');
+      let list = document.getElementById('leaderboard-list');
+      list.innerHTML = "";
+      if(leaderboard.length === 0) { list.innerHTML = "<p style='text-align:center;'>مفيش حد لعب للآن!</p>"; return; }
+      
+      // ترتيب تنازلي حسب النسبة
+      let sorted = [...leaderboard].sort((a,b) => (b.score/b.total) - (a.score/a.total));
+      
+      sorted.forEach((l, idx) => {
+        let div = document.createElement('div');
+        div.style.cssText = "background:rgba(255,255,255,0.05); padding:12px; border-radius:10px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;";
+        let rank = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx+1}`;
+        div.innerHTML = `
+          <div><span style="font-size:1.2rem; margin-left:10px;">${rank}</span> <strong>${l.name}</strong> <span style="font-size:0.8rem; color:var(--text-muted);">(${l.cat})</span></div>
+          <div style="color:var(--success); font-weight:bold;">${l.score} / ${l.total}</div>
+        `;
+        list.appendChild(div);
       });
     }
 
-    function exportQuestions() {
-      let dataStr = JSON.stringify(questions);
-      navigator.clipboard.writeText(dataStr).then(() => { alert("تم النسخ!"); }).catch(() => { prompt("انسخ الكود التالي:", dataStr); });
+    function playSound(id) {
+      let audio = document.getElementById(id);
+      if(audio) { audio.currentTime = 0; audio.play().catch(()=>{}); }
     }
 
-    function importQuestions() {
-      let inputCode = prompt("الصق كود الأسئلة هنا:");
-      if (inputCode) {
+    // --- الإدارة ---
+    function toggleAdminLogin() { switchScreen('screen-admin-login'); }
+    
+    function loginAdmin() {
+      if(document.getElementById('admin-pass').value === "123456") {
+        document.getElementById('admin-pass').value = "";
+        switchScreen('screen-admin');
+        renderAdminQs();
+      } else { alert("كلمة المرور غلط!"); }
+    }
+
+    function addQuestion() {
+      let fileInput = document.getElementById('add-q-file');
+      
+      let qObj = {
+        cat: document.getElementById('add-cat').value.trim() || "عام",
+        catPass: document.getElementById('add-cat-pass').value.trim(),
+        qText: document.getElementById('add-q-text').value.trim(),
+        time: parseInt(document.getElementById('add-q-time').value) || 15,
+        options: [
+          document.getElementById('opt0').value.trim(),
+          document.getElementById('opt1').value.trim(),
+          document.getElementById('opt2').value.trim(),
+          document.getElementById('opt3').value.trim()
+        ],
+        correct: parseInt(document.getElementById('add-q-correct').value),
+        imgBase64: null
+      };
+
+      if(!qObj.qText || !qObj.options[0]) { alert("اكتب السؤال والخيار الأول على الأقل!"); return; }
+
+      // لو رفع صورة، نحولها لـ Base64 ونحفظها
+      if(fileInput.files.length > 0) {
+        let reader = new FileReader();
+        reader.onload = function(e) {
+          qObj.imgBase64 = e.target.result;
+          saveQToDb(qObj);
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        saveQToDb(qObj);
+      }
+    }
+
+    function saveQToDb(qObj) {
+      db.push(qObj);
+      localStorage.setItem('family_game_db', JSON.stringify(db));
+      alert("تم حفظ السؤال بنجاح! ✅");
+      document.getElementById('add-q-text').value = "";
+      document.getElementById('add-q-file').value = "";
+      document.getElementById('opt0').value = ""; document.getElementById('opt1').value = "";
+      document.getElementById('opt2').value = ""; document.getElementById('opt3').value = "";
+      renderAdminQs();
+    }
+
+    function renderAdminQs() {
+      document.getElementById('admin-count').innerText = db.length;
+      let list = document.getElementById('admin-q-list');
+      list.innerHTML = "";
+      db.forEach((q, idx) => {
+        let div = document.createElement('div');
+        div.className = "q-list-item";
+        div.innerHTML = `
+          <div style="flex:1; padding-left:10px;">
+            <span style="color:var(--primary); font-size:0.8rem;">[${q.cat}]</span> 
+            ${q.qText} ${q.imgBase64 ? '📸' : ''}
+          </div>
+          <button class="btn-danger" style="border:none; padding:5px 10px; border-radius:6px; cursor:pointer;" onclick="deleteQ(${idx})">حذف</button>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function deleteQ(idx) {
+      if(confirm("متأكد بتحذف السؤال؟")) {
+        db.splice(idx, 1);
+        localStorage.setItem('family_game_db', JSON.stringify(db));
+        renderAdminQs();
+      }
+    }
+
+    function clearLeaderboard() {
+      if(confirm("متأكد بتمسح كل النقاط؟")) {
+        leaderboard = [];
+        localStorage.removeItem('family_leaderboard');
+        alert("تم مسح اللوحة!");
+      }
+    }
+
+    function exportData() {
+      navigator.clipboard.writeText(JSON.stringify(db)).then(() => alert("تم نسخ قاعدة البيانات وتقدر تبعثها لأي حد!"))
+      .catch(() => prompt("انسخ الكود هذا:", JSON.stringify(db)));
+    }
+
+    function importData() {
+      let code = prompt("الصق قاعدة البيانات هنا:");
+      if(code) {
         try {
-          let parsed = JSON.parse(inputCode);
-          if (Array.isArray(parsed)) { questions = parsed; saveQuestionsToStorage(); alert("تم الاستيراد بنجاح!"); renderAdminQuestionsList(); } 
-          else { alert("الكود غير صالح!"); }
-        } catch(e) { alert("حدث خطأ أثناء قراءة الكود!"); }
+          db = JSON.parse(code);
+          localStorage.setItem('family_game_db', JSON.stringify(db));
+          alert("تم الاستيراد!");
+          renderAdminQs();
+        } catch(e) { alert("الكود فيه مشكلة!"); }
       }
     }
   </script>
