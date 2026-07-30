@@ -3,35 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تحدي العيلة الاحترافي 👑</title>
+  <title>تحدي الكانمي الاحترافي 👑</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
   
-  <!-- استدعاء مكتبات Firebase السحابية -->
+  <!-- استدعاء مكتبات Firebase السحابية المحدثة والمستقرة -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // --- // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyB9wITy6jhiIKIUwtpX7YEK2X4448-QDCw",
-  authDomain: "addlist-c2c2d.firebaseapp.com",
-  projectId: "addlist-c2c2d",
-  storageBucket: "addlist-c2c2d.firebasestorage.app",
-  messagingSenderId: "5553235519",
-  appId: "1:5553235519:web:5f136a8a64c899a230fa8a",
-  measurementId: "G-4P840280Y9"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app); ---
+    // مفاتيح مشروعك الثابتة
     const firebaseConfig = {
       apiKey: "AIzaSyB9wITy6jhiIKIUwtpX7YEK2X4448-QDCw",
       authDomain: "addlist-c2c2d.firebaseapp.com",
@@ -44,8 +24,10 @@ const analytics = getAnalytics(app); ---
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    
+    // ربط الدوال بالنافذة العامة لتسهيل الاستدعاء
     window.db = db;
-    window.firebaseFns = { collection, addDoc, getDocs, doc, setDoc, getDoc, updateDoc };
+    window.fbModules = { collection, addDoc, getDocs, doc, setDoc, getDoc };
   </script>
 
   <style>
@@ -83,15 +65,12 @@ const analytics = getAnalytics(app); ---
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(139,92,246,0.6); }
     .btn-outline { background: transparent; border: 2px solid var(--primary); color: white; }
     .btn-outline:hover { background: var(--primary); }
-    .btn-danger { background: var(--danger); color: white; }
 
-    /* شبكة الأقسام */
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
     .cat-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 25px 15px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; }
     .cat-card:hover { background: var(--primary); transform: translateY(-5px); border-color: var(--primary); }
     .lock { position: absolute; top: 10px; left: 10px; font-size: 1.1rem; }
 
-    /* شاشة اللعب */
     .timer-bar-container { width: 100%; height: 10px; background: rgba(0,0,0,0.5); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
     .timer-bar-fill { height: 100%; width: 100%; background: var(--success); transition: width 1s linear; }
     .q-box { background: rgba(15,23,42,0.5); padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
@@ -111,25 +90,25 @@ const analytics = getAnalytics(app); ---
 
   <div class="container">
 
-    <!-- 1. شاشة تسجيل الدخول بالاسم (الاسم محجوز ولا يتكرر) -->
+    <!-- 1. تسجيل الدخول بالاسم -->
     <div id="s-login" class="card active">
-      <h2>أهلاً بيك يا بطل! 🎯</h2>
-      <p class="subtitle">اكتب اسمك الحقيقي (اسمك محجوز ليك بروحك ومحدش يقدر يقلده)</p>
+      <h2>أهلاً بيك يا كويس! 🎯</h2>
+      <p class="subtitle">اكتب اسمك الحقيقي زي جهاد (اسمك محجوز ليك بروحك)</p>
       <div class="input-group">
         <input type="text" id="player-name-input" placeholder="مثال: همام الكانمي...">
       </div>
       <button class="btn btn-primary" onclick="registerPlayer()">دخول للتحدي 🚀</button>
     </div>
 
-    <!-- 2. شاشة اختيار الأقسام -->
+    <!-- 2. اختيار الأقسام -->
     <div id="s-categories" class="card">
       <h2>اختر القسم يا <span id="welcome-name" style="color:var(--warning);"></span></h2>
-      <p class="subtitle">كل قسم مخصص لفئة أو عيلة معينة</p>
+      <p class="subtitle">كل قسم مخصص لفئة معينة</p>
       <div id="cats-grid" class="grid"></div>
       <button class="btn btn-outline" onclick="loadLeaderboard()" style="margin-top:25px;">🏆 لوحة المتصدرين العامة</button>
     </div>
 
-    <!-- 3. شاشة اللعب التفاعلية -->
+    <!-- 3. شاشة اللعب -->
     <div id="s-game" class="card">
       <div style="display:flex; justify-content:space-between; margin-bottom:12px; font-weight:bold; color:var(--warning);">
         <span id="g-cat-title">قسم</span>
@@ -155,10 +134,10 @@ const analytics = getAnalytics(app); ---
       <button class="btn btn-primary" onclick="goToCategories()">الرجوع للأقسام 🔄</button>
     </div>
 
-    <!-- 5. لوحة المتصدرين العالمية -->
+    <!-- 5. لوحة المتصدرين -->
     <div id="s-leaderboard" class="card">
       <h2>🏆 لوحة المتصدرين الكبرى</h2>
-      <p class="subtitle">أفضل الأبطال على مستوى اللعبة بالكامل</p>
+      <p class="subtitle">أفضل الأبطال على مستوى اللعبة</p>
       <div id="lb-list" style="max-height:300px; overflow-y:auto; margin-bottom:20px;"></div>
       <button class="btn btn-outline" onclick="goToCategories()">رجوع</button>
     </div>
@@ -173,15 +152,15 @@ const analytics = getAnalytics(app); ---
       <button class="btn btn-outline" onclick="goToCategories()">إلغاء</button>
     </div>
 
-    <!-- 7. لوحة الإدارة الشاملة -->
+    <!-- 7. لوحة الأدمن -->
     <div id="s-admin" class="card">
       <h2>لوحة الأدمن 🛠️</h2>
       <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:14px; margin-bottom:20px;">
         <h3 style="color:var(--primary); font-size:1rem; margin-bottom:10px;">➕ إضافة سؤال جديد للسحابة</h3>
         <div class="input-group"><label>اسم القسم:</label><input type="text" id="a-cat" value="عام"></div>
-        <div class="input-group"><label>باسورد القسم (اختياري لعائلات معينة):</label><input type="text" id="a-pass" placeholder="مثال: فوزي123"></div>
+        <div class="input-group"><label>باسورد القسم (اختياري):</label><input type="text" id="a-pass" placeholder="مثال: فوزي123"></div>
         <div class="input-group"><label>نص السؤال:</label><input type="text" id="a-q" placeholder="السؤال..."></div>
-        <div class="input-group"><label>رابط الصورة (مباشر .jpg أو .png):</label><input type="text" id="a-img" placeholder="اختياري"></div>
+        <div class="input-group"><label>رابط الصورة (اختياري):</label><input type="text" id="a-img" placeholder="رابط مباشر"></div>
         <div class="input-group"><label>وقت السؤال (بالثواني):</label><input type="number" id="a-time" value="15"></div>
         <div class="input-group">
           <label>الخيارات (4 خيارات):</label>
@@ -206,12 +185,7 @@ const analytics = getAnalytics(app); ---
 
   </div>
 
-  <!-- الأصوات -->
-  <audio id="snd-good" src="good.m4a"></audio>
-  <audio id="snd-wrong" src="wrong.m4a"></audio>
-  <audio id="snd-timeout" src="timeout.m4a"></audio>
-
-  <script type="module">
+  <script>
     let currentUser = "";
     let currentCat = "";
     let catQuestions = [];
@@ -226,66 +200,79 @@ const analytics = getAnalytics(app); ---
       document.getElementById(id).classList.add('active');
     }
 
-    window.goToCategories = function() { showCard('s-categories'); loadCategories(); }
-    window.openAdminLogin = function() { showCard('s-admin-login'); }
+    window.goToCategories = function() { 
+      showCard('s-categories'); 
+      loadCategories(); 
+    }
+    
+    window.openAdminLogin = function() { 
+      showCard('s-admin-login'); 
+    }
 
-    // التحقق من الاسم الحصري وحجزه في سحابة Firebase
+    // تسجيل اللاعب وحجز الاسم
     window.registerPlayer = async function() {
       let name = document.getElementById('player-name-input').value.trim();
       if(!name) { alert("اكتب اسمك الأول!"); return; }
 
-      const { doc, getDoc, setDoc } = window.firebaseFns;
-      const userRef = doc(window.db, "users", name);
-      const userSnap = await getDoc(userRef);
+      try {
+        const { doc, getDoc, setDoc } = window.fbModules;
+        const userRef = doc(window.db, "users", name);
+        const userSnap = await getDoc(userRef);
 
-      if(userSnap.exists()) {
-        alert("⚠️ هذا الاسم مسجل مسبقاً لشخص آخر! اختر اسماً مميزاً خاص بك.");
-        return;
+        if(userSnap.exists()) {
+          alert("⚠️ هذا الاسم مسجل مسبقاً لشخص آخر! اختر اسماً مميزاً.");
+          return;
+        }
+
+        await setDoc(userRef, { name: name, createdAt: new Date() });
+        currentUser = name;
+        document.getElementById('welcome-name').innerText = name;
+        goToCategories();
+      } catch(e) {
+        console.error(e);
+        alert("صار خطأ في الاتصال بالشبكة، تأكد من الإنترنت وحاول مرة ثانية.");
       }
-
-      // حجز الاسم فوراً
-      await setDoc(userRef, { name: name, createdAt: new Date() });
-      currentUser = name;
-      document.getElementById('welcome-name').innerText = name;
-      goToCategories();
     }
 
-    // جلب الأقسام والأسئلة من السحابة
+    // جلب الأقسام
     async function loadCategories() {
-      const { collection, getDocs } = window.firebaseFns;
-      const querySnapshot = await getDocs(collection(window.db, "questions"));
-      let grid = document.getElementById('cats-grid');
-      grid.innerHTML = "";
+      try {
+        const { collection, getDocs } = window.fbModules;
+        const querySnapshot = await getDocs(collection(window.db, "questions"));
+        let grid = document.getElementById('cats-grid');
+        grid.innerHTML = "";
 
-      let catsMap = {};
-      querySnapshot.forEach((docSnap) => {
-        let q = docSnap.data();
-        if(!catsMap[q.cat]) catsMap[q.cat] = { count: 0, pass: q.catPass || "" };
-        catsMap[q.cat].count++;
-      });
+        let catsMap = {};
+        querySnapshot.forEach((docSnap) => {
+          let q = docSnap.data();
+          if(!catsMap[q.cat]) catsMap[q.cat] = { count: 0, pass: q.catPass || "" };
+          catsMap[q.cat].count++;
+        });
 
-      if(Object.keys(catsMap).length === 0) {
-        grid.innerHTML = "<p style='grid-column:1/-1;text-align:center;'>لا توجد أسئلة حالياً، ادخل لوحة الأدمن وضيف أسئلة!</p>";
-        return;
-      }
+        if(Object.keys(catsMap).length === 0) {
+          grid.innerHTML = "<p style='grid-column:1/-1;text-align:center;'>لا توجد أسئلة حالياً، ادخل لوحة الأدمن (من فوق) وضيف أسئلة!</p>";
+          return;
+        }
 
-      for(let cat in catsMap) {
-        let hasPass = catsMap[cat].pass !== "";
-        let div = document.createElement('div');
-        div.className = "cat-card";
-        div.innerHTML = `
-          ${hasPass ? '<span class="lock">🔒</span>' : ''}
-          <h3 style="margin-top:${hasPass?'10px':'0'}">${cat}</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;">${catsMap[cat].count} أسئلة</p>
-        `;
-        div.onclick = () => checkCatAccess(cat, catsMap[cat].pass);
-        grid.appendChild(div);
+        for(let cat in catsMap) {
+          let hasPass = catsMap[cat].pass !== "";
+          let div = document.createElement('div');
+          div.className = "cat-card";
+          div.innerHTML = `
+            ${hasPass ? '<span class="lock">🔒</span>' : ''}
+            <h3 style="margin-top:${hasPass?'10px':'0'}">${cat}</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;">${catsMap[cat].count} أسئلة</p>
+          `;
+          div.onclick = () => checkCatAccess(cat, catsMap[cat].pass);
+          grid.appendChild(div);
+        }
+      } catch(e) {
+        console.error(e);
       }
     }
 
     window.checkCatAccess = async function(cat, pass) {
-      // فحص هل المستخدم لعب هذا القسم من قبل؟ (محاولة واحدة فقط)
-      const { doc, getDoc } = window.firebaseFns;
+      const { doc, getDoc } = window.fbModules;
       const attemptRef = doc(window.db, "attempts", `${currentUser}_${cat}`);
       const attemptSnap = await getDoc(attemptRef);
 
@@ -295,7 +282,7 @@ const analytics = getAnalytics(app); ---
       }
 
       if(pass) {
-        let entered = prompt("هذا القسم خاص ومحمي بكلمة مرور. أدخل الرمز:");
+        let entered = prompt("هذا القسم محمي بكلمة مرور. أدخل الرمز:");
         if(entered !== pass) { alert("كلمة المرور غير صحيحة!"); return; }
       }
 
@@ -304,7 +291,7 @@ const analytics = getAnalytics(app); ---
     }
 
     async function fetchQuestionsForGame(cat) {
-      const { collection, getDocs } = window.firebaseFns;
+      const { collection, getDocs } = window.fbModules;
       const querySnapshot = await getDocs(collection(window.db, "questions"));
       catQuestions = [];
       querySnapshot.forEach((docSnap) => {
@@ -372,7 +359,6 @@ const analytics = getAnalytics(app); ---
     function triggerTimeout() {
       if(isLockedAns) return;
       isLockedAns = true;
-      playAudio('snd-timeout');
       let q = catQuestions[qIdx];
       let btns = document.querySelectorAll('.opt-btn');
       btns.forEach(b => b.style.pointerEvents = 'none');
@@ -391,11 +377,9 @@ const analytics = getAnalytics(app); ---
       if(idx === q.correct) {
         btn.classList.add('correct');
         score++;
-        playAudio('snd-good');
       } else {
         btn.classList.add('wrong');
         if(btns[q.correct]) btns[q.correct].classList.add('correct');
-        playAudio('snd-wrong');
       }
       proceedNext();
     }
@@ -417,13 +401,8 @@ const analytics = getAnalytics(app); ---
       let desc = ratio === 1 ? "🔥 أسطورة الكانمي! العلامة الكاملة!" : ratio >= 0.5 ? "😎 أداء رائع جداً!" : "😂 ضايع فيها، حاول مرة جاية فقسم تاني!";
       document.getElementById('res-desc').innerText = desc;
 
-      // حفظ النتيجة في سحابة Firebase وتسجيل أن اللاعب أنهى محاولته
-      const { doc, setDoc, addDoc, collection } = window.firebaseFns;
-      
-      // قفل المحاولة لهذا القسم
+      const { doc, setDoc, addDoc, collection } = window.fbModules;
       await setDoc(doc(window.db, "attempts", `${currentUser}_${currentCat}`), { played: true });
-
-      // إضافة النتيجة في لوحة المتصدرين العالمية
       await addDoc(collection(window.db, "leaderboard"), {
         name: currentUser,
         cat: currentCat,
@@ -435,7 +414,7 @@ const analytics = getAnalytics(app); ---
 
     window.loadLeaderboard = async function() {
       showCard('s-leaderboard');
-      const { collection, getDocs } = window.firebaseFns;
+      const { collection, getDocs } = window.fbModules;
       let querySnapshot = await getDocs(collection(window.db, "leaderboard"));
       let list = document.getElementById('lb-list');
       list.innerHTML = "";
@@ -458,12 +437,6 @@ const analytics = getAnalytics(app); ---
       });
     }
 
-    function playAudio(id) {
-      let a = document.getElementById(id);
-      if(a) { a.currentTime = 0; a.play().catch(()=>{}); }
-    }
-
-    // إدارة الأسئلة
     window.verifyAdmin = function() {
       if(document.getElementById('admin-pass').value === "123456") {
         document.getElementById('admin-pass').value = "";
@@ -472,30 +445,35 @@ const analytics = getAnalytics(app); ---
     }
 
     window.cloudAddQuestion = async function() {
-      const { addDoc, collection } = window.firebaseFns;
-      let qObj = {
-        cat: document.getElementById('a-cat').value.trim(),
-        catPass: document.getElementById('a-pass').value.trim(),
-        qText: document.getElementById('a-q').value.trim(),
-        imgUrl: document.getElementById('a-img').value.trim(),
-        time: parseInt(document.getElementById('a-time').value) || 15,
-        options: [
-          document.getElementById('ao0').value.trim(),
-          document.getElementById('ao1').value.trim(),
-          document.getElementById('ao2').value.trim(),
-          document.getElementById('ao3').value.trim()
-        ],
-        correct: parseInt(document.getElementById('a-correct').value)
-      };
+      try {
+        const { addDoc, collection } = window.fbModules;
+        let qObj = {
+          cat: document.getElementById('a-cat').value.trim(),
+          catPass: document.getElementById('a-pass').value.trim(),
+          qText: document.getElementById('a-q').value.trim(),
+          imgUrl: document.getElementById('a-img').value.trim(),
+          time: parseInt(document.getElementById('a-time').value) || 15,
+          options: [
+            document.getElementById('ao0').value.trim(),
+            document.getElementById('ao1').value.trim(),
+            document.getElementById('ao2').value.trim(),
+            document.getElementById('ao3').value.trim()
+          ],
+          correct: parseInt(document.getElementById('a-correct').value)
+        };
 
-      if(!qObj.qText || !qObj.options[0]) { alert("املأ بيانات السؤال على الأقل!"); return; }
+        if(!qObj.qText || !qObj.options[0]) { alert("املأ بيانات السؤال على الأقل!"); return; }
 
-      await addDoc(collection(window.db, "questions"), qObj);
-      alert("تم رفع السؤال بنجاح إلى السحابة للجميع! ☁️");
-      document.getElementById('a-q').value = "";
-      document.getElementById('a-img').value = "";
-      document.getElementById('ao0').value = ""; document.getElementById('ao1').value = "";
-      document.getElementById('ao2').value = ""; document.getElementById('ao3').value = "";
+        await addDoc(collection(window.db, "questions"), qObj);
+        alert("تم رفع السؤال بنجاح إلى السحابة للجميع! ☁️");
+        document.getElementById('a-q').value = "";
+        document.getElementById('a-img').value = "";
+        document.getElementById('ao0').value = ""; document.getElementById('ao1').value = "";
+        document.getElementById('ao2').value.trim = ""; document.getElementById('ao3').value = "";
+      } catch(e) {
+        console.error(e);
+        alert("حدث خطأ أثناء حفظ السؤال، تأكد من الاتصال.");
+      }
     }
   </script>
 </body>
