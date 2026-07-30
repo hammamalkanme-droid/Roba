@@ -6,12 +6,10 @@
   <title>تحدي الكانمي الاحترافي 👑</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
   
-  <!-- استدعاء مكتبات Firebase السحابية المحدثة والمستقرة -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // مفاتيح مشروعك الثابتة
     const firebaseConfig = {
       apiKey: "AIzaSyB9wITy6jhiIKIUwtpX7YEK2X4448-QDCw",
       authDomain: "addlist-c2c2d.firebaseapp.com",
@@ -25,7 +23,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     
-    // ربط الدوال بالنافذة العامة لتسهيل الاستدعاء
     window.db = db;
     window.fbModules = { collection, addDoc, getDocs, doc, setDoc, getDoc };
   </script>
@@ -48,15 +45,17 @@
 
     .container { width: 100%; max-width: 600px; }
     .card { background: var(--bg-card); border-radius: 24px; padding: 30px 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); display: none; }
-    .card.active { display: block; animation: fadeIn 0.4s ease; }
+    .card.active { display: block; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
 
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+    .shake { animation: shake 0.4s ease-in-out; }
 
     h2 { text-align: center; margin-bottom: 10px; font-size: 1.6rem; }
     p.subtitle { text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem; }
 
-    .input-group { margin-bottom: 20px; }
-    label { display: block; margin-bottom: 8px; color: var(--text-muted); font-weight: 600; font-size: 0.9rem; }
+    .input-group { margin-bottom: 18px; }
+    label { display: block; margin-bottom: 6px; color: var(--text-muted); font-weight: 600; font-size: 0.85rem; }
     input, select { width: 100%; padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.2); background: rgba(15,23,42,0.6); color: white; outline: none; font-size: 1rem; transition: 0.3s; }
     input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(139,92,246,0.4); }
 
@@ -68,17 +67,17 @@
 
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
     .cat-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 25px 15px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; }
-    .cat-card:hover { background: var(--primary); transform: translateY(-5px); border-color: var(--primary); }
+    .cat-card:hover { background: var(--primary); transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 20px rgba(139,92,246,0.3); }
     .lock { position: absolute; top: 10px; left: 10px; font-size: 1.1rem; }
 
-    .timer-bar-container { width: 100%; height: 10px; background: rgba(0,0,0,0.5); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
-    .timer-bar-fill { height: 100%; width: 100%; background: var(--success); transition: width 1s linear; }
+    .timer-bar-container { width: 100%; height: 12px; background: rgba(0,0,0,0.5); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
+    .timer-bar-fill { height: 100%; width: 100%; background: var(--success); transition: width 1s linear, background 0.3s; }
     .q-box { background: rgba(15,23,42,0.5); padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
     .options { display: flex; flex-direction: column; gap: 12px; }
     .opt-btn { background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); padding: 16px; border-radius: 14px; color: white; font-size: 1.1rem; font-weight: 600; cursor: pointer; text-align: right; transition: 0.2s; }
-    .opt-btn:hover { border-color: var(--primary); background: rgba(139,92,246,0.15); }
-    .opt-btn.correct { background: rgba(16,185,129,0.2) !important; border-color: var(--success) !important; color: var(--success); }
-    .opt-btn.wrong { background: rgba(239,68,68,0.2) !important; border-color: var(--danger) !important; color: var(--danger); }
+    .opt-btn:hover { border-color: var(--primary); background: rgba(139,92,246,0.15); transform: scale(1.01); }
+    .opt-btn.correct { background: rgba(16,185,129,0.3) !important; border-color: var(--success) !important; color: #34d399; transform: scale(1.02); }
+    .opt-btn.wrong { background: rgba(239,68,68,0.3) !important; border-color: var(--danger) !important; color: #f87171; }
   </style>
 </head>
 <body>
@@ -90,25 +89,31 @@
 
   <div class="container">
 
-    <!-- 1. تسجيل الدخول بالاسم -->
+    <!-- 1. تسجيل الدخول بكلمة مرور -->
     <div id="s-login" class="card active">
-      <h2>أهلاً بيك يا كويس! 🎯</h2>
-      <p class="subtitle">اكتب اسمك الحقيقي زي جهاد (اسمك محجوز ليك بروحك)</p>
+      <h2>أهلاً بيك في اللعبة! 🎯</h2>
+      <p class="subtitle">سجل باسمك وكلمة مرور خاصة بك (تحفظ حسابك للأبد)</p>
       <div class="input-group">
-        <input type="text" id="player-name-input" placeholder="مثال: همام الكانمي...">
+        <label>اسم اللاعب:</label>
+        <input type="text" id="player-name-input" placeholder="مثال: جهاد الكانمي">
       </div>
-      <button class="btn btn-primary" onclick="registerPlayer()">دخول للتحدي 🚀</button>
+      <div class="input-group">
+        <label>كلمة المرور:</label>
+        <input type="password" id="player-pass-input" placeholder="كلمة مرور سرية للدخول بها لاحقاً">
+      </div>
+      <button class="btn btn-primary" onclick="loginPlayer()">دخول / تسجيل 🚀</button>
     </div>
 
     <!-- 2. اختيار الأقسام -->
     <div id="s-categories" class="card">
-      <h2>اختر القسم يا <span id="welcome-name" style="color:var(--warning);"></span></h2>
-      <p class="subtitle">كل قسم مخصص لفئة معينة</p>
+      <h2>اختر القسم يا <span id="welcome-name" style="color:var(--warning);"></span> 🔥</h2>
+      <p class="subtitle">اختبر معلوماتك وتحدى الأصدقاء</p>
       <div id="cats-grid" class="grid"></div>
       <button class="btn btn-outline" onclick="loadLeaderboard()" style="margin-top:25px;">🏆 لوحة المتصدرين العامة</button>
+      <button class="btn" style="background:rgba(239,68,68,0.2); color:var(--danger); border:1px solid var(--danger); margin-top:10px;" onclick="logout()">تسجيل خروج 🚪</button>
     </div>
 
-    <!-- 3. شاشة اللعب -->
+    <!-- 3. شاشة اللعب التفاعلية -->
     <div id="s-game" class="card">
       <div style="display:flex; justify-content:space-between; margin-bottom:12px; font-weight:bold; color:var(--warning);">
         <span id="g-cat-title">قسم</span>
@@ -117,7 +122,7 @@
       <div class="timer-bar-container">
         <div id="timer-fill" class="timer-bar-fill"></div>
       </div>
-      <div class="q-box">
+      <div class="q-box" id="question-box-wrapper">
         <h2 id="q-text" style="font-size:1.3rem; margin:0;">نص السؤال؟</h2>
         <img id="q-img" style="width:100%; max-height:220px; object-fit:cover; border-radius:12px; margin-top:15px; display:none;" alt="">
       </div>
@@ -125,19 +130,19 @@
     </div>
 
     <!-- 4. شاشة النتيجة -->
-    <div id="s-result" class="card">
-      <h2>🎉 انتهت محاولتك!</h2>
-      <div style="font-size:3.5rem; text-align:center; font-weight:900; color:var(--warning); margin:15px 0;">
+    <div id="s-result" class="card" style="text-align: center;">
+      <h2>🎉 انتهت المعركة!</h2>
+      <div style="font-size:4rem; font-weight:900; color:var(--warning); margin:15px 0;">
         <span id="res-score">0</span> / <span id="res-total">0</span>
       </div>
-      <p id="res-desc" style="text-align:center; font-size:1.1rem; margin-bottom:25px; font-weight:bold;"></p>
+      <p id="res-desc" style="font-size:1.1rem; margin-bottom:25px; font-weight:bold;"></p>
       <button class="btn btn-primary" onclick="goToCategories()">الرجوع للأقسام 🔄</button>
     </div>
 
     <!-- 5. لوحة المتصدرين -->
     <div id="s-leaderboard" class="card">
-      <h2>🏆 لوحة المتصدرين الكبرى</h2>
-      <p class="subtitle">أفضل الأبطال على مستوى اللعبة</p>
+      <h2>🏆 لوحة الشرف الكبرى</h2>
+      <p class="subtitle">أفضل أبطال الساحة</p>
       <div id="lb-list" style="max-height:300px; overflow-y:auto; margin-bottom:20px;"></div>
       <button class="btn btn-outline" onclick="goToCategories()">رجوع</button>
     </div>
@@ -158,7 +163,7 @@
       <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:14px; margin-bottom:20px;">
         <h3 style="color:var(--primary); font-size:1rem; margin-bottom:10px;">➕ إضافة سؤال جديد للسحابة</h3>
         <div class="input-group"><label>اسم القسم:</label><input type="text" id="a-cat" value="عام"></div>
-        <div class="input-group"><label>باسورد القسم (اختياري):</label><input type="text" id="a-pass" placeholder="مثال: فوزي123"></div>
+        <div class="input-group"><label>باسورد القسم (اختياري):</label><input type="text" id="a-pass" placeholder="مثال: vip123"></div>
         <div class="input-group"><label>نص السؤال:</label><input type="text" id="a-q" placeholder="السؤال..."></div>
         <div class="input-group"><label>رابط الصورة (اختياري):</label><input type="text" id="a-img" placeholder="رابط مباشر"></div>
         <div class="input-group"><label>وقت السؤال (بالثواني):</label><input type="number" id="a-time" value="15"></div>
@@ -209,10 +214,19 @@
       showCard('s-admin-login'); 
     }
 
-    // تسجيل اللاعب وحجز الاسم
-    window.registerPlayer = async function() {
+    window.logout = function() {
+      currentUser = "";
+      document.getElementById('player-name-input').value = "";
+      document.getElementById('player-pass-input').value = "";
+      showCard('s-login');
+    }
+
+    // تسجيل الدخول أو التحقق من كلمة المرور
+    window.loginPlayer = async function() {
       let name = document.getElementById('player-name-input').value.trim();
-      if(!name) { alert("اكتب اسمك الأول!"); return; }
+      let pass = document.getElementById('player-pass-input').value.trim();
+      
+      if(!name || !pass) { alert("الرجاء إدخال الاسم وكلمة المرور!"); return; }
 
       try {
         const { doc, getDoc, setDoc } = window.fbModules;
@@ -220,21 +234,25 @@
         const userSnap = await getDoc(userRef);
 
         if(userSnap.exists()) {
-          alert("⚠️ هذا الاسم مسجل مسبقاً لشخص آخر! اختر اسماً مميزاً.");
-          return;
+          let data = userSnap.data();
+          if(data.pass !== pass) {
+            alert("❌ كلمة المرور غير صحيحة لهذا الاسم! إذا كان الاسم لك، أدخل كلمتك الصحيحة.");
+            return;
+          }
+        } else {
+          // حساب جديد
+          await setDoc(userRef, { name: name, pass: pass, createdAt: new Date() });
         }
 
-        await setDoc(userRef, { name: name, createdAt: new Date() });
         currentUser = name;
         document.getElementById('welcome-name').innerText = name;
         goToCategories();
       } catch(e) {
         console.error(e);
-        alert("صار خطأ في الاتصال بالشبكة، تأكد من الإنترنت وحاول مرة ثانية.");
+        alert("خطأ في الاتصال بقاعدة البيانات.");
       }
     }
 
-    // جلب الأقسام
     async function loadCategories() {
       try {
         const { collection, getDocs } = window.fbModules;
@@ -250,7 +268,7 @@
         });
 
         if(Object.keys(catsMap).length === 0) {
-          grid.innerHTML = "<p style='grid-column:1/-1;text-align:center;'>لا توجد أسئلة حالياً، ادخل لوحة الأدمن (من فوق) وضيف أسئلة!</p>";
+          grid.innerHTML = "<p style='grid-column:1/-1;text-align:center;'>لا توجد أسئلة حالياً، ادخل لوحة الأدمن وضيف أسئلة!</p>";
           return;
         }
 
@@ -277,13 +295,13 @@
       const attemptSnap = await getDoc(attemptRef);
 
       if(attemptSnap.exists()) {
-        alert("❌ عذراً يا " + currentUser + "! لقد قمت بلعب هذا القسم مسبقاً، ولك محاولة واحدة فقط.");
+        alert("⚠️ لقد أنهيت هذا القسم مسبقاً، ولك محاولة واحدة لكل قسم.");
         return;
       }
 
       if(pass) {
-        let entered = prompt("هذا القسم محمي بكلمة مرور. أدخل الرمز:");
-        if(entered !== pass) { alert("كلمة المرور غير صحيحة!"); return; }
+        let entered = prompt("هذا القسم محمي، أدخل كلمة مرور القسم:");
+        if(entered !== pass) { alert("كلمة المرور خاطئة!"); return; }
       }
 
       currentCat = cat;
@@ -299,7 +317,7 @@
         if(q.cat === cat) catQuestions.push(q);
       });
 
-      if(catQuestions.length === 0) { alert("لا توجد أسئلة في هذا القسم!"); return; }
+      if(catQuestions.length === 0) { alert("لا توجد أسئلة هنا!"); return; }
 
       qIdx = 0;
       score = 0;
@@ -363,6 +381,11 @@
       let btns = document.querySelectorAll('.opt-btn');
       btns.forEach(b => b.style.pointerEvents = 'none');
       if(btns[q.correct]) btns[q.correct].classList.add('correct');
+      
+      let wrapper = document.getElementById('question-box-wrapper');
+      wrapper.classList.add('shake');
+      setTimeout(() => wrapper.classList.remove('shake'), 400);
+
       proceedNext();
     }
 
@@ -380,6 +403,9 @@
       } else {
         btn.classList.add('wrong');
         if(btns[q.correct]) btns[q.correct].classList.add('correct');
+        let wrapper = document.getElementById('question-box-wrapper');
+        wrapper.classList.add('shake');
+        setTimeout(() => wrapper.classList.remove('shake'), 400);
       }
       proceedNext();
     }
@@ -389,7 +415,7 @@
         qIdx++;
         if(qIdx < catQuestions.length) { loadQuestion(); }
         else { finishGame(); }
-      }, 1800);
+      }, 1600);
     }
 
     async function finishGame() {
@@ -398,7 +424,7 @@
       document.getElementById('res-total').innerText = catQuestions.length;
 
       let ratio = score / catQuestions.length;
-      let desc = ratio === 1 ? "🔥 أسطورة الكانمي! العلامة الكاملة!" : ratio >= 0.5 ? "😎 أداء رائع جداً!" : "😂 ضايع فيها، حاول مرة جاية فقسم تاني!";
+      let desc = ratio === 1 ? "🔥 أسطورة! العلامة الكاملة بكل استحقاق!" : ratio >= 0.5 ? "😎 أداء قوي وممتاز!" : "😅 حاجة تبكي، ركز المرة الجاية!";
       document.getElementById('res-desc').innerText = desc;
 
       const { doc, setDoc, addDoc, collection } = window.fbModules;
@@ -423,14 +449,14 @@
       querySnapshot.forEach(d => items.push(d.data()));
       items.sort((a,b) => (b.score / b.total) - (a.score / a.total));
 
-      if(items.length === 0) { list.innerHTML = "<p style='text-align:center;'>مفيش نتائج مسجلة حتى الآن!</p>"; return; }
+      if(items.length === 0) { list.innerHTML = "<p style='text-align:center;'>لا توجد نتائج مسجلة حتى الآن!</p>"; return; }
 
       items.forEach((item, idx) => {
         let div = document.createElement('div');
         div.style.cssText = "background:rgba(255,255,255,0.05); padding:12px 15px; border-radius:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;";
         let rank = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx+1}`;
         div.innerHTML = `
-          <div><span style="font-size:1.2rem; margin-left:10px;">${rank}</span> <strong>${item.name}</strong> <span style="font-size:0.8rem; color:var(--text-muted);">(${item.cat})</span></div>
+          <div><span style="font-size:1.2rem; margin-left:10px;">${rank}</span> <strong>${item.name}</strong> <span style="font-size:0.8rem; color:var::text-muted">(${item.cat})</span></div>
           <div style="color:var(--success); font-weight:bold; font-size:1.1rem;">${item.score} / ${item.total}</div>
         `;
         list.appendChild(div);
@@ -465,14 +491,14 @@
         if(!qObj.qText || !qObj.options[0]) { alert("املأ بيانات السؤال على الأقل!"); return; }
 
         await addDoc(collection(window.db, "questions"), qObj);
-        alert("تم رفع السؤال بنجاح إلى السحابة للجميع! ☁️");
+        alert("تم رفع السؤال بنجاح للسحابة! ☁️");
         document.getElementById('a-q').value = "";
         document.getElementById('a-img').value = "";
         document.getElementById('ao0').value = ""; document.getElementById('ao1').value = "";
-        document.getElementById('ao2').value.trim = ""; document.getElementById('ao3').value = "";
+        document.getElementById('ao2').value = ""; document.getElementById('ao3').value = "";
       } catch(e) {
         console.error(e);
-        alert("حدث خطأ أثناء حفظ السؤال، تأكد من الاتصال.");
+        alert("خطأ أثناء حفظ السؤال.");
       }
     }
   </script>
