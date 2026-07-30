@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>لعبة العائلة الكبرى 🎭</title>
-  <!-- خط Cairo من Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
   
   <style>
@@ -20,267 +19,45 @@
       --text-muted: #94a3b8;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Cairo', sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+    body { background: var(--bg-gradient); min-height: 100vh; color: var(--text-main); display: flex; flex-direction: column; align-items: center; padding: 20px 15px; }
+    
+    .navbar { width: 100%; max-width: 600px; display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 12px 20px; border-radius: 16px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+    .brand-title { font-weight: 900; font-size: 1.2rem; background: linear-gradient(to right, #a78bfa, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .btn-nav { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--text-main); padding: 6px 14px; border-radius: 10px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.3s ease; }
+    .btn-nav:hover { background: var(--accent-purple); border-color: var(--accent-purple); }
 
-    body {
-      background: var(--bg-gradient);
-      min-height: 100vh;
-      color: var(--text-main);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px 15px;
-    }
+    .container { width: 100%; max-width: 600px; }
+    .card { background: var(--card-bg); border-radius: 24px; padding: 25px 20px; backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.4); margin-bottom: 20px; }
+    h1, h2, h3 { text-align: center; margin-bottom: 15px; }
+    p.subtitle { text-align: center; color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; }
 
-    /* Top Navigation Bar */
-    .navbar {
-      width: 100%;
-      max-width: 600px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--card-bg);
-      padding: 12px 20px;
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      margin-bottom: 20px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 6px; font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
+    input, select { width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(15, 23, 42, 0.6); color: var(--text-main); font-size: 0.95rem; outline: none; transition: border 0.3s ease; }
+    input:focus, select:focus { border-color: var(--accent-purple); }
 
-    .brand-title {
-      font-weight: 900;
-      font-size: 1.2rem;
-      background: linear-gradient(to right, #a78bfa, #f472b6);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+    .btn-primary { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--accent-indigo), var(--accent-purple)); color: white; border: none; border-radius: 14px; font-size: 1.05rem; font-weight: 700; cursor: pointer; box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4); transition: transform 0.2s ease, box-shadow 0.2s ease; margin-top: 10px; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6); }
+    .btn-secondary { background: rgba(255, 255, 255, 0.1); color: var(--text-main); border: 1px solid rgba(255, 255, 255, 0.2); }
 
-    .btn-nav {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: var(--text-main);
-      padding: 6px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
+    .options-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+    .opt-btn { background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.1); padding: 16px; border-radius: 16px; color: var(--text-main); font-size: 1.05rem; font-weight: 600; cursor: pointer; text-align: right; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center; }
+    .opt-btn:hover { background: rgba(139, 92, 246, 0.15); border-color: var(--accent-purple); transform: translateX(-4px); }
+    .opt-btn.correct { background: rgba(16, 185, 129, 0.2) !important; border-color: var(--success-color) !important; color: #34d399 !important; }
+    .opt-btn.wrong { background: rgba(239, 68, 68, 0.2) !important; border-color: var(--danger-color) !important; color: #f87171 !important; }
 
-    .btn-nav:hover {
-      background: var(--accent-purple);
-      border-color: var(--accent-purple);
-    }
+    .rounds-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-top: 20px; }
+    .round-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 20px 10px; text-align: center; cursor: pointer; transition: all 0.3s ease; }
+    .round-card:hover { background: var(--accent-purple); transform: translateY(-4px); }
 
-    /* Main Container */
-    .container {
-      width: 100%;
-      max-width: 600px;
-    }
+    .q-item { background: rgba(15, 23, 42, 0.7); padding: 12px 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255, 255, 255, 0.05); }
+    .q-item span { font-size: 0.9rem; }
+    .btn-del { background: var(--danger-color); color: white; border: none; padding: 4px 10px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; }
 
-    .card {
-      background: var(--card-bg);
-      border-radius: 24px;
-      padding: 25px 20px;
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-      margin-bottom: 20px;
-    }
-
-    h1, h2, h3 {
-      text-align: center;
-      margin-bottom: 15px;
-    }
-
-    p.subtitle {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-bottom: 20px;
-    }
-
-    /* Custom Form Inputs */
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 12px 15px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      background: rgba(15, 23, 42, 0.6);
-      color: var(--text-main);
-      font-size: 0.95rem;
-      outline: none;
-      transition: border 0.3s ease;
-    }
-
-    input:focus, select:focus {
-      border-color: var(--accent-purple);
-    }
-
-    /* Buttons */
-    .btn-primary {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, var(--accent-indigo), var(--accent-purple));
-      color: white;
-      border: none;
-      border-radius: 14px;
-      font-size: 1.05rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      margin-top: 10px;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--text-main);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    /* Question Screen Options */
-    .options-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 20px;
-    }
-
-    .opt-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 2px solid rgba(255, 255, 255, 0.1);
-      padding: 16px;
-      border-radius: 16px;
-      color: var(--text-main);
-      font-size: 1.05rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-align: right;
-      transition: all 0.2s ease;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .opt-btn:hover {
-      background: rgba(139, 92, 246, 0.15);
-      border-color: var(--accent-purple);
-      transform: translateX(-4px);
-    }
-
-    .opt-btn.correct {
-      background: rgba(16, 185, 129, 0.2) !important;
-      border-color: var(--success-color) !important;
-      color: #34d399 !important;
-    }
-
-    .opt-btn.wrong {
-      background: rgba(239, 68, 68, 0.2) !important;
-      border-color: var(--danger-color) !important;
-      color: #f87171 !important;
-    }
-
-    /* Round Selection Cards */
-    .rounds-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 12px;
-      margin-top: 20px;
-    }
-
-    .round-card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 20px 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .round-card:hover {
-      background: var(--accent-purple);
-      transform: translateY(-4px);
-    }
-
-    /* Admin Question List Items */
-    .q-item {
-      background: rgba(15, 23, 42, 0.7);
-      padding: 12px 15px;
-      border-radius: 12px;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .q-item span {
-      font-size: 0.9rem;
-    }
-
-    .btn-del {
-      background: var(--danger-color);
-      color: white;
-      border: none;
-      padding: 4px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.8rem;
-    }
-
-    /* Badge & Progress Bar */
-    .progress-bar {
-      width: 100%;
-      height: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent-purple), #f472b6);
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 4px 12px;
-      background: rgba(139, 92, 246, 0.2);
-      color: #c084fc;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
+    .progress-bar { width: 100%; height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-purple), #f472b6); width: 0%; transition: width 0.3s ease; }
+    .badge { display: inline-block; padding: 4px 12px; background: rgba(139, 92, 246, 0.2); color: #c084fc; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; }
     .hidden { display: none !important; }
   </style>
 </head>
@@ -298,10 +75,7 @@
     <div id="screen-rounds" class="card">
       <h2>مرحباً بكم في تحدي العيلة 🎭</h2>
       <p class="subtitle">اختر الجولة وتبت شكون أكثر واحد فاهم العيلة صح!</p>
-      
-      <div id="rounds-container" class="rounds-grid">
-        <!-- يتم توليد الجولات تلقائياً -->
-      </div>
+      <div id="rounds-container" class="rounds-grid"></div>
     </div>
 
     <!-- 2. شاشة اللعب والأسئلة -->
@@ -316,22 +90,20 @@
       
       <h2 id="question-text" style="margin-top: 15px;">نص السؤال يظهر هنا؟</h2>
       
-      <div id="options-container" class="options-grid">
-        <!-- الخيارات تنزل هنا -->
-      </div>
+      <!-- مكان عرض الصورة في حال وجودها -->
+      <img id="question-image" src="" alt="صورة توضيحية" style="width: 100%; border-radius: 16px; margin-top: 15px; display: none; border: 2px solid rgba(255,255,255,0.1);">
+      
+      <div id="options-container" class="options-grid"></div>
     </div>
 
     <!-- 3. شاشة النتيجة النهائية -->
     <div id="screen-result" class="card hidden">
       <h2>🎉 تمت الجولة بنجاح!</h2>
       <p class="subtitle">النتيجة النهائية متاعك:</p>
-      
       <div style="font-size: 3.5rem; text-align: center; font-weight: 900; color: var(--warning-color); margin: 10px 0;">
         <span id="final-score">0</span> / <span id="total-questions">0</span>
       </div>
-      
       <p id="result-evaluation" style="text-align: center; font-size: 1.1rem; margin-bottom: 20px; font-weight: 700;"></p>
-      
       <button class="btn-primary" onclick="showRoundsScreen()">الرجوع للقائمة الرئيسية 🔄</button>
     </div>
 
@@ -339,7 +111,6 @@
     <div id="screen-login" class="card hidden">
       <h2>تسجيل دخول الإدارة 🔐</h2>
       <p class="subtitle">خاص بالمشرف (همَّام الكانمي)</p>
-      
       <div class="form-group">
         <label>اسم المستخدم:</label>
         <input type="text" id="login-username" placeholder="مثال: همام الكانمي">
@@ -348,7 +119,6 @@
         <label>كلمة السر:</label>
         <input type="password" id="login-password" placeholder="******">
       </div>
-      
       <button class="btn-primary" onclick="attemptLogin()">دخول لوحة التحكم</button>
       <button class="btn-primary btn-secondary" onclick="showRoundsScreen()" style="margin-top: 8px;">إلغاء</button>
     </div>
@@ -369,6 +139,12 @@
         <div class="form-group">
           <label>نص السؤال:</label>
           <input type="text" id="add-q-text" placeholder="مثلاً: من الأسرع لما نقولوا الماكلة واطية؟">
+        </div>
+        
+        <!-- التعديل الجديد: خانة إضافة الصورة -->
+        <div class="form-group">
+          <label>رابط صورة للسؤال (اختياري):</label>
+          <input type="text" id="add-q-image" placeholder="حط رابط الصورة من النت، أو خليها فاضية">
         </div>
         
         <div class="form-group">
@@ -392,21 +168,15 @@
         <button class="btn-primary" onclick="addNewQuestion()">حفظ السؤال جديد 💾</button>
       </div>
 
-      <!-- تصدير واستيراد الأسئلة -->
       <div style="background: rgba(15, 23, 42, 0.5); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
         <h3 style="font-size: 1rem; color: var(--warning-color);">📤 مشاركة الأسئلة مع العيلة:</h3>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">
-          انقر على تصدير وانسخ النص وابعثه للعيلة، وهم يديروا "استيراد" عنده عشان تنزل الأسئلة الجديدة!
-        </p>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">انقر على تصدير وانسخ النص وابعثه للعيلة، وهم يديروا "استيراد" عنده عشان تنزل الأسئلة الجديدة!</p>
         <button class="btn-primary btn-secondary" onclick="exportQuestions()" style="margin-bottom: 8px;">نسخ كود الأسئلة 📋</button>
         <button class="btn-primary btn-secondary" onclick="importQuestions()">استيراد كود الأسئلة 📥</button>
       </div>
 
-      <!-- قائمة الأسئلة الحالية -->
       <h3>قائمة الأسئلة المخزنة (<span id="admin-q-count">0</span>):</h3>
-      <div id="admin-questions-list" style="max-height: 200px; overflow-y: auto; margin-top: 10px;">
-        <!-- الأسئلة المضافة تطلع هنا -->
-      </div>
+      <div id="admin-questions-list" style="max-height: 200px; overflow-y: auto; margin-top: 10px;"></div>
 
       <button class="btn-primary" onclick="logoutAdmin()" style="background: var(--danger-color); margin-top: 20px;">تسجيل الخروج 🚪</button>
     </div>
@@ -418,27 +188,20 @@
   <audio id="sound-wrong" src="wrong.mp3"></audio>
 
   <script>
-    // ==========================================
-    // 1. الأسئلة الافتراضية الأولية
-    // ==========================================
     const defaultQuestions = [
       {
         round: 1,
         q: "من أسرع واحد في العيلة لما نقولوا الماكلة واطية؟ 🏃‍♂️",
+        image: "", 
         options: ["أحمد", "همّام", "عمر", "أيوب"],
         correct: 0
       },
       {
         round: 1,
         q: "من الشخص المعروف بقمة العباطة والكساد؟ 🤪",
+        image: "",
         options: ["سارة", "أسامة", "عبدالعزيز", "آدم"],
         correct: 1
-      },
-      {
-        round: 2,
-        q: "شكون اللي تطلب منه حاجة يجيبلك حاجة ثانية خالص؟ 🤦‍♂️",
-        options: ["محمد", "على", "فاطمة", "سوفيان"],
-        correct: 2
       }
     ];
 
@@ -448,32 +211,20 @@
     let currentScore = 0;
     let isAdminLoggedIn = false;
 
-    // Load stored questions or defaults
     function loadStoredQuestions() {
       const stored = localStorage.getItem('family_quiz_db');
       if (stored) {
-        try {
-          questions = JSON.parse(stored);
-        } catch(e) {
-          questions = [...defaultQuestions];
-        }
+        try { questions = JSON.parse(stored); } catch(e) { questions = [...defaultQuestions]; }
       } else {
         questions = [...defaultQuestions];
         saveQuestionsToStorage();
       }
     }
 
-    function saveQuestionsToStorage() {
-      localStorage.setItem('family_quiz_db', JSON.stringify(questions));
-    }
+    function saveQuestionsToStorage() { localStorage.setItem('family_quiz_db', JSON.stringify(questions)); }
 
-    // Initialize App
-    window.onload = function() {
-      loadStoredQuestions();
-      showRoundsScreen();
-    };
+    window.onload = function() { loadStoredQuestions(); showRoundsScreen(); };
 
-    // View Navigation Helpers
     function hideAllScreens() {
       document.getElementById('screen-rounds').classList.add('hidden');
       document.getElementById('screen-game').classList.add('hidden');
@@ -482,29 +233,16 @@
       document.getElementById('screen-admin').classList.add('hidden');
     }
 
-    function showRoundsScreen() {
-      hideAllScreens();
-      document.getElementById('screen-rounds').classList.remove('hidden');
-      renderRounds();
-    }
+    function showRoundsScreen() { hideAllScreens(); document.getElementById('screen-rounds').classList.remove('hidden'); renderRounds(); }
 
-    // ==========================================
-    // 2. الجولات واللعب
-    // ==========================================
     function renderRounds() {
       const container = document.getElementById('rounds-container');
       container.innerHTML = "";
-
-      // Get unique rounds
       const roundsSet = new Set(questions.map(q => q.round));
       const roundsList = Array.from(roundsSet).sort((a,b) => a - b);
 
-      if(roundsList.length === 0) {
-        container.innerHTML = "<p style='grid-column: 1/-1; color: var(--text-muted);'>لا توجد أسئلة حالياً. اطلب من الأدمن إضافة أسئلة!</p>";
-        return;
-      }
+      if(roundsList.length === 0) { container.innerHTML = "<p style='grid-column: 1/-1; color: var(--text-muted);'>لا توجد أسئلة حالياً.</p>"; return; }
 
-      // Card for All Rounds
       let allCard = document.createElement('div');
       allCard.className = 'round-card';
       allCard.style.borderColor = 'var(--accent-purple)';
@@ -522,19 +260,11 @@
     }
 
     function startGame(roundNum) {
-      if (roundNum === 0) {
-        currentFilteredQuestions = [...questions];
-      } else {
-        currentFilteredQuestions = questions.filter(q => q.round === roundNum);
-      }
+      if (roundNum === 0) { currentFilteredQuestions = [...questions]; } 
+      else { currentFilteredQuestions = questions.filter(q => q.round === roundNum); }
+      if(currentFilteredQuestions.length === 0) { alert("لا توجد أسئلة!"); return; }
 
-      if(currentFilteredQuestions.length === 0) {
-        alert("لا توجد أسئلة في هذه الجولة!");
-        return;
-      }
-
-      currentQIndex = 0;
-      currentScore = 0;
+      currentQIndex = 0; currentScore = 0;
       hideAllScreens();
       document.getElementById('screen-game').classList.remove('hidden');
       displayQuestion();
@@ -542,20 +272,25 @@
 
     function displayQuestion() {
       let q = currentFilteredQuestions[currentQIndex];
-      
-      // Update Stats
       document.getElementById('game-round-badge').innerText = q.round ? `الجولة ${q.round}` : "التحدي العام";
       document.getElementById('game-count-badge').innerText = `سؤال ${currentQIndex + 1} من ${currentFilteredQuestions.length}`;
-      
-      // Update Progress Bar
       let pct = ((currentQIndex) / currentFilteredQuestions.length) * 100;
       document.getElementById('progress-fill').style.width = pct + "%";
 
       document.getElementById('question-text').innerText = q.q;
 
+      // --- كود عرض الصورة في حال وجودها ---
+      let imgEl = document.getElementById('question-image');
+      if (q.image && q.image.trim() !== "") {
+        imgEl.src = q.image.trim();
+        imgEl.style.display = "block"; // إظهار الصورة
+      } else {
+        imgEl.style.display = "none";  // إخفاء المكان لو مفيش صورة
+        imgEl.src = "";
+      }
+
       let optsContainer = document.getElementById('options-container');
       optsContainer.innerHTML = "";
-
       q.options.forEach((optText, idx) => {
         if(!optText.trim()) return;
         let btn = document.createElement('button');
@@ -567,7 +302,6 @@
     }
 
     function selectOption(selectedIndex, btnElement) {
-      // Disable all buttons to prevent double click
       let allBtns = document.querySelectorAll('.opt-btn');
       allBtns.forEach(b => b.style.pointerEvents = 'none');
 
@@ -578,25 +312,17 @@
       if (selectedIndex === currentQ.correct) {
         btnElement.classList.add('correct');
         currentScore++;
-        soundGood.currentTime = 0;
-        soundGood.play().catch(e => console.log("الصوت محتاج تشغيل يدوي أول مرة"));
+        soundGood.currentTime = 0; soundGood.play().catch(e=>console.log("الصوت محتاج تشغيل يدوي"));
       } else {
         btnElement.classList.add('wrong');
-        // Highlight the right one
-        if(allBtns[currentQ.correct]) {
-          allBtns[currentQ.correct].classList.add('correct');
-        }
-        soundWrong.currentTime = 0;
-        soundWrong.play().catch(e => console.log("الصوت محتاج تشغيل يدوي أول مرة"));
+        if(allBtns[currentQ.correct]) { allBtns[currentQ.correct].classList.add('correct'); }
+        soundWrong.currentTime = 0; soundWrong.play().catch(e=>console.log("الصوت محتاج تشغيل يدوي"));
       }
 
       setTimeout(() => {
         currentQIndex++;
-        if (currentQIndex < currentFilteredQuestions.length) {
-          displayQuestion();
-        } else {
-          finishGame();
-        }
+        if (currentQIndex < currentFilteredQuestions.length) { displayQuestion(); } 
+        else { finishGame(); }
       }, 1600);
     }
 
@@ -608,40 +334,25 @@
 
       let ratio = currentScore / currentFilteredQuestions.length;
       let evalText = "";
-      if (ratio === 1) {
-        evalText = "🏆 أسطورة! فاهم العيلة أدق تفاصيلها!";
-      } else if (ratio >= 0.6) {
-        evalText = "😎 ممتاز! جوّك مليح وفاهم معظم اللقطات!";
-      } else {
-        evalText = "😂 فاااشل! محتاج تقعد مع العيلة أكثر وتعرف أخبارهم!";
-      }
+      if (ratio === 1) evalText = "🏆 أسطورة! فاهم العيلة أدق تفاصيلها!";
+      else if (ratio >= 0.6) evalText = "😎 ممتاز! جوّك مليح وفاهم معظم اللقطات!";
+      else evalText = "😂 فاااشل! محتاج تقعد مع العيلة أكثر وتعرف أخبارهم!";
       document.getElementById('result-evaluation').innerText = evalText;
     }
 
-    // ==========================================
-    // 3. تسجيل دخول وتسجيل خروج الأدمن
-    // ==========================================
     function openLoginModal() {
-      if (isAdminLoggedIn) {
-        showAdminPanel();
-      } else {
-        hideAllScreens();
-        document.getElementById('screen-login').classList.remove('hidden');
-      }
+      if (isAdminLoggedIn) { showAdminPanel(); } 
+      else { hideAllScreens(); document.getElementById('screen-login').classList.remove('hidden'); }
     }
 
     function attemptLogin() {
       let user = document.getElementById('login-username').value.trim();
       let pass = document.getElementById('login-password').value.trim();
-
-      // قبول اسم همام الكانمي بأي تشكيل بسيط وباسورد 123456
       if ((user === "همام الكانمي" || user === "همَّام الكانمي" || user === "همام") && pass === "123456") {
         isAdminLoggedIn = true;
         document.getElementById('admin-toggle-btn').innerText = "لوحة الإدارة 🛠️";
         showAdminPanel();
-      } else {
-        alert("اسم المستخدم أو كلمة السر غير صحيحة! (جرب: همام الكانمي / 123456)");
-      }
+      } else { alert("اسم المستخدم أو كلمة السر غير صحيحة!"); }
     }
 
     function logoutAdmin() {
@@ -650,55 +361,40 @@
       showRoundsScreen();
     }
 
-    function showAdminPanel() {
-      hideAllScreens();
-      document.getElementById('screen-admin').classList.remove('hidden');
-      renderAdminQuestionsList();
-    }
+    function showAdminPanel() { hideAllScreens(); document.getElementById('screen-admin').classList.remove('hidden'); renderAdminQuestionsList(); }
 
-    // ==========================================
-    // 4. دالة إضافة مسح وتصدير الأسئلة
-    // ==========================================
     function addNewQuestion() {
       let roundNum = parseInt(document.getElementById('add-q-round').value) || 1;
       let qText = document.getElementById('add-q-text').value.trim();
+      let qImg = document.getElementById('add-q-image').value.trim(); // جلب رابط الصورة
       let o0 = document.getElementById('opt-0').value.trim();
       let o1 = document.getElementById('opt-1').value.trim();
       let o2 = document.getElementById('opt-2').value.trim();
       let o3 = document.getElementById('opt-3').value.trim();
       let correctIdx = parseInt(document.getElementById('add-q-correct').value);
 
-      if (!qText || !o0 || !o1) {
-        alert("يرجى كتابة نص السؤال وعلى الأقل خيارين اثنين!");
-        return;
-      }
+      if (!qText || !o0 || !o1) { alert("يرجى كتابة نص السؤال وعلى الأقل خيارين اثنين!"); return; }
 
       let newQ = {
         round: roundNum,
         q: qText,
+        image: qImg, // حفظ الصورة في بيانات السؤال
         options: [o0, o1, o2, o3].filter(o => o !== ""),
         correct: correctIdx
       };
 
-      questions.push(newQ);
-      saveQuestionsToStorage();
-      alert("تمت إضافة السؤال بنجاح! 🥳");
+      questions.push(newQ); saveQuestionsToStorage(); alert("تمت إضافة السؤال بنجاح! 🥳");
 
-      // Reset Form
       document.getElementById('add-q-text').value = "";
-      document.getElementById('opt-0').value = "";
-      document.getElementById('opt-1').value = "";
-      document.getElementById('opt-2').value = "";
-      document.getElementById('opt-3').value = "";
-
+      document.getElementById('add-q-image').value = ""; // تفريغ خانة الصورة
+      document.getElementById('opt-0').value = ""; document.getElementById('opt-1').value = "";
+      document.getElementById('opt-2').value = ""; document.getElementById('opt-3').value = "";
       renderAdminQuestionsList();
     }
 
     function deleteQuestion(index) {
       if (confirm("هل أنت متأكد من مسح هذا السؤال؟")) {
-        questions.splice(index, 1);
-        saveQuestionsToStorage();
-        renderAdminQuestionsList();
+        questions.splice(index, 1); saveQuestionsToStorage(); renderAdminQuestionsList();
       }
     }
 
@@ -706,46 +402,27 @@
       document.getElementById('admin-q-count').innerText = questions.length;
       let listDiv = document.getElementById('admin-questions-list');
       listDiv.innerHTML = "";
-
       questions.forEach((q, idx) => {
         let item = document.createElement('div');
         item.className = 'q-item';
-        item.innerHTML = `
-          <div>
-            <strong style="color:var(--accent-purple);">[جـ ${q.round}]</strong> 
-            <span>${q.q}</span>
-          </div>
-          <button class="btn-del" onclick="deleteQuestion(${idx})">مسح</button>
-        `;
+        item.innerHTML = `<div><strong style="color:var(--accent-purple);">[جـ ${q.round}]</strong> <span>${q.q}</span> ${q.image ? '📸' : ''}</div><button class="btn-del" onclick="deleteQuestion(${idx})">مسح</button>`;
         listDiv.appendChild(item);
       });
     }
 
     function exportQuestions() {
       let dataStr = JSON.stringify(questions);
-      navigator.clipboard.writeText(dataStr).then(() => {
-        alert("تم نسخ كود الأسئلة للحافظة! ابعثه لأفراد العيلة في الواتساب.");
-      }).catch(() => {
-        prompt("انسخ الكود التالي وابعثه للعيلة:", dataStr);
-      });
+      navigator.clipboard.writeText(dataStr).then(() => { alert("تم النسخ!"); }).catch(() => { prompt("انسخ الكود التالي:", dataStr); });
     }
 
     function importQuestions() {
-      let inputCode = prompt("الصق كود الأسئلة الذي وصلك من همّام هنا:");
+      let inputCode = prompt("الصق كود الأسئلة هنا:");
       if (inputCode) {
         try {
           let parsed = JSON.parse(inputCode);
-          if (Array.isArray(parsed)) {
-            questions = parsed;
-            saveQuestionsToStorage();
-            alert("تم استيراد الأسئلة بنجاح! جاهزين للعب الان 🔥");
-            renderAdminQuestionsList();
-          } else {
-            alert("الكود غير صالح!");
-          }
-        } catch(e) {
-          alert("حدث خطأ أثناء قراءة الكود!");
-        }
+          if (Array.isArray(parsed)) { questions = parsed; saveQuestionsToStorage(); alert("تم الاستيراد بنجاح!"); renderAdminQuestionsList(); } 
+          else { alert("الكود غير صالح!"); }
+        } catch(e) { alert("حدث خطأ أثناء قراءة الكود!"); }
       }
     }
   </script>
